@@ -88,7 +88,7 @@ a:hover{color:var(--brand-accent)}
 .site-nav{
   background:var(--nav-pill);
   border-radius:999px;
-  padding:10px 14px;
+  /* padding:10px 14px; */
   box-shadow:var(--shadow);
 }
 
