@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Call • Texas Sports Lighting</title>
+  <meta name="description" content="Texas Sports Lighting — LED sports lighting for every venue." />
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <script defer src="assets/js/main.js"></script>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Call • Texas Sports Lighting" />
+  <meta property="og:description" content="Texas Sports Lighting — LED sports lighting for every venue." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://texassportslighting.com/contact.html" />
+
+  <!-- Schema.org Organization -->
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Organization", "name": "Texas Sports Lighting", "url": "https://texassportslighting.com", "logo": "https://texassportslighting.com/assets/img/logo-mark.svg", "sameAs": ["https://www.facebook.com/", "https://www.instagram.com/"]}
+  </script>
+</head>
+<body>
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="index.html" class="brand" aria-label="Texas Sports Lighting Home">
+      <img class="brand-mark" src="assets/img/logo-mark.svg" alt="" />
+      <span class="brand-text">Texas Sports Lighting</span>
+    </a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">
+      <span class="sr-only">Toggle navigation</span>
+      <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+    </button>
+    <nav id="site-nav" class="site-nav">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li class="has-sub">
+          <button class="sub-toggle">Services</button>
+          <ul class="sub">
+            <li><a href="services/tennis-centers.html">Tennis Centers</a></li>
+            <li><a href="services/football-stadium.html">Football Stadium</a></li>
+            <li><a href="services/indoor-arenas.html">Indoor Arenas</a></li>
+            <li><a href="services/aquatic-centers.html">Aquatic Centers</a></li>
+            <li><a href="services/sports-complex.html">Sports Complex</a></li>
+          </ul>
+        </li>
+        <li><a href="products.html">Products</a></li>
+        <li class="has-sub">
+          <button class="sub-toggle">Resources</button>
+          <ul class="sub">
+            <li><a href="resources/gallery.html">Gallery</a></li>
+            <li><a href="resources/blog.html">Blog</a></li>
+          </ul>
+        </li>
+<li><a href="retrofit-new-build.html">Retrofits &amp; New Build</a></li>
+        <li><a href="controls.html">Controls</a></li>
+        <li><a class="btn btn-cta" href="tel:+1XXXXXXXXXX">Call</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<main>
+
+<section class="section">
+  <div class="container grid split">
+    <div>
+      <span class="kicker">Contact</span>
+      <h1 class="title">Request a Quote</h1>
+      <p class="lead">Tell us about your project. We'll follow up with next steps and a tailored plan.</p>
+    </div>
+    <div class="card">
+      <!-- Updated: action points to Vercel PHP Function; added honeypot + CSRF -->
+      <form class="form" data-validate action="/api/contact-submit.php" method="POST" accept-charset="UTF-8">
+        <!-- Honeypot (must stay empty) -->
+        <input type="text" name="website" autocomplete="off" tabindex="-1" style="position:absolute; left:-5000px; height:0; width:0; opacity:0;" aria-hidden="true">
+        <!-- CSRF token (set via script below) -->
+        <input type="hidden" name="csrf" id="csrf">
+
+        <div class="row">
+          <input class="input" name="name" placeholder="Full name *" required>
+          <input class="input" type="email" name="email" placeholder="Email *" required>
+        </div>
+        <div class="row">
+          <input class="input" name="phone" placeholder="Phone">
+          <input class="input" name="organization" placeholder="Organization">
+        </div>
+        <div class="row">
+          <select class="input" name="state">
+            <option value="">State</option>
+            <option>AL</option><option>AK</option><option>AZ</option><option>AR</option><option>CA</option>
+            <option>CO</option><option>CT</option><option>DE</option><option>FL</option><option>GA</option>
+            <option>HI</option><option>ID</option><option>IL</option><option>IN</option><option>IA</option>
+            <option>KS</option><option>KY</option><option>LA</option><option>ME</option><option>MD</option>
+            <option>MA</option><option>MI</option><option>MN</option><option>MS</option><option>MO</option>
+            <option>MT</option><option>NE</option><option>NV</option><option>NH</option><option>NJ</option>
+            <option>NM</option><option>NY</option><option>NC</option><option>ND</option><option>OH</option>
+            <option>OK</option><option>OR</option><option>PA</option><option>RI</option><option>SC</option>
+            <option>SD</option><option>TN</option><option>TX</option><option>UT</option><option>VT</option>
+            <option>VA</option><option>WA</option><option>WV</option><option>WI</option><option>WY</option>
+          </select>
+          <select class="input" name="facility">
+            <option value="">Facility</option>
+            <option>Tennis</option><option>Football</option><option>Indoor Arena</option><option>Aquatic</option><option>Sports Complex</option>
+          </select>
+        </div>
+        <div class="row">
+          <select class="input" name="projectType" required>
+            <option value="">Project type *</option>
+            <option>Retrofit</option>
+            <option>New Build</option>
+          </select>
+          <select class="input" name="timeline">
+            <option value="">Timeline</option>
+            <option>0–3 months</option><option>3–6 months</option><option>6–12 months</option><option>12+ months</option>
+          </select>
+        </div>
+        <textarea class="input" name="message" rows="5" placeholder="Describe your facility, goals, and any constraints..."></textarea>
+        <button class="btn btn-cta" type="submit">Submit</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div>
+      <div class="brand cluster">
+        <img class="brand-mark" src="assets/img/logo-mark.svg" alt="" />
+        <span class="brand-text">Texas Sports Lighting</span>
+      </div>
+      <p class="muted">
+        Premium LED sports lighting solutions for fields, courts, arenas, and aquatic facilities across the U.S.
+      </p>
+      <p class="muted small">© 2025 Texas Sports Lighting. All rights reserved.</p>
+    </div>
+    <div>
+      <h4>Company</h4>
+      <ul class="link-list">
+        <li><a href="about.html">About</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="controls.html">Controls</a></li>
+        <li><a href="retrofit-new-build.html">Retrofits &amp; New Build</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Services</h4>
+      <ul class="link-list">
+        <li><a href="services/tennis-centers.html">Tennis Centers</a></li>
+        <li><a href="services/football-stadium.html">Football Stadium</a></li>
+        <li><a href="services/indoor-arenas.html">Indoor Arenas</a></li>
+        <li><a href="services/aquatic-centers.html">Aquatic Centers</a></li>
+        <li><a href="services/sports-complex.html">Sports Complex</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <ul class="link-list">
+        <li><a href="mailto:noreply@contact.cxgraphics.me">noreply@contact.cxgraphics.me</a></li>
+        <li><a href="contact.html">Request a Quote</a></li>
+      </ul>
+      <div class="social cluster">
+        <a href="#" aria-label="Facebook"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M13 22v-9h3l1-4h-4V7c0-1.03.34-2 2-2h2V1h-3c-3.09 0-5 1.91-5 5v3H6v4h3v9h4z"/></svg></a>
+        <a href="#" aria-label="Instagram"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M7 2C4.24 2 2 4.24 2 7v10c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5H7zm0 2h10c1.66 0 3 1.34 3 3v10c0 1.66-1.34 3-3 3H7c-1.66 0-3-1.34-3-3V7c0-1.66 1.34-3 3-3zm5 2a6 6 0 100 12A6 6 0 0012 6zm0 2a4 4 0 110 8 4 4 0 010-8zm6.5-.25a1.25 1.25 0 100 2.5 1.25 1.25 0 000-2.5z"/></svg></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- CSRF: set a random token cookie + populate hidden input -->
+<script>
+  (function () {
+    try {
+      var array = new Uint8Array(16);
+      window.crypto.getRandomValues(array);
+      var t = Array.from(array).map(function(b){return ('0' + b.toString(16)).slice(-2)}).join('');
+      document.cookie = 'csrf=' + t + '; Path=/; SameSite=Lax';
+      var el = document.getElementById('csrf');
+      if (el) el.value = t;
+    } catch (e) {
+      // Fallback if crypto isn’t available
+      var t2 = (Date.now().toString(36) + Math.random().toString(36).slice(2));
+      document.cookie = 'csrf=' + t2 + '; Path=/; SameSite=Lax';
+      var el2 = document.getElementById('csrf');
+      if (el2) el2.value = t2;
+    }
+  })();
+</script>
+</body>
+</html>
