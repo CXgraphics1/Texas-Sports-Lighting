@@ -23,6 +23,78 @@
   {"@context": "https://schema.org", "@type": "Organization", "name": "Texas Sports Lighting", "url": "https://texassportslighting.com", "logo": "https://texassportslighting.com/assets/img/logo-mark.svg", "sameAs": ["https://www.facebook.com/", "https://www.instagram.com/"]}
   </script>
 </head>
+
+<script>
+(function () {
+  function attachResendForm(formId) {
+    const form = document.getElementById(formId);
+    if (!form) return;
+
+    const statusEl = form.querySelector("[data-form-status]");
+    const submitBtn = form.querySelector("button[type='submit']");
+
+    function setStatus(msg, isError) {
+      statusEl.style.display = "block";
+      statusEl.textContent = msg;
+      statusEl.style.color = isError ? "#b42318" : "";
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      if (!form.checkValidity()) {
+        setStatus("Please fill out the required fields.", true);
+        return;
+      }
+
+      // Honeypot (bots)
+      if ((form.website?.value || "").trim().length > 0) {
+        setStatus("Thanks! We'll be in touch shortly.", false);
+        form.reset();
+        return;
+      }
+
+      submitBtn.disabled = true;
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = "Sending...";
+
+      const payload = {
+        name: form.name.value.trim(),
+        email: form.email.value.trim(),
+        phone: (form.phone?.value || "").trim(),
+        organization: (form.organization?.value || "").trim(),
+        projectType: (form.projectType?.value || "").trim(),
+        facility: (form.facility?.value || "").trim(),
+        message: (form.message?.value || "").trim(),
+      };
+
+      try {
+        const r = await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+        if (r.ok) {
+          setStatus("Message sent! We'll follow up shortly.", false);
+          form.reset();
+        } else {
+          setStatus("Something went wrong. Please try again.", true);
+        }
+      } catch (err) {
+        setStatus("Network error. Please try again.", true);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }
+    });
+  }
+
+  // Attach to homepage form
+  attachResendForm("homeContactForm");
+})();
+</script>
+
 <body>
 <header class="site-header">
   <div class="container header-inner">
@@ -52,13 +124,13 @@
         <li class="has-sub">
           <button class="sub-toggle">Resources</button>
           <ul class="sub">
-            <li><a href="resources/gallery.html">Gallery</a></li>
+            <!--<li><a href="resources/gallery.html">Gallery</a></li>-->
             <li><a href="resources/blog.html">Blog</a></li>
           </ul>
         </li>
 <li><a href="retrofit-new-build.html">Retrofits &amp; New Build</a></li>
         <li><a href="controls.html">Controls</a></li>
-        <li><a class="btn btn-cta" href="tel:+1XXXXXXXXXX">Call</a></li>
+        <li><a class="btn btn-cta" href="/contact.html">Contact</a></li>
       </ul>
     </nav>
   </div>
@@ -184,30 +256,57 @@
       <p class="lead">Tell us about your facility, timeline, and goals—we’ll build the best path forward.</p>
     </div>
     <div class="card">
-      <form class="form" data-validate action="https://formspree.io/f/your-id" method="POST">
-        <div class="row">
-          <input class="input" name="name" placeholder="Full name *" required>
-          <input class="input" type="email" name="email" placeholder="Email *" required>
-        </div>
-        <div class="row">
-          <input class="input" name="phone" placeholder="Phone">
-          <input class="input" name="organization" placeholder="Organization">
-        </div>
-        <div class="row">
-          <select class="input" name="projectType" required>
-            <option value="">Project type *</option>
-            <option>Retrofit</option>
-            <option>New Build</option>
-          </select>
-          <select class="input" name="facility">
-            <option value="">Facility</option>
-            <option>Tennis</option><option>Football</option><option>Indoor Arena</option><option>Aquatic</option><option>Sports Complex</option>
-          </select>
-        </div>
-        <textarea class="input" name="message" rows="4" placeholder="Tell us about your project..."></textarea>
-        <button class="btn btn-cta" type="submit">Request a Quote</button>
-        <p class="help">This form uses Formspree. Replace the action URL with your endpoint.</p>
-      </form>
+      <form id="homeContactForm" class="form" novalidate>
+  <!-- Honeypot -->
+  <input
+    type="text"
+    name="website"
+    autocomplete="off"
+    tabindex="-1"
+    aria-hidden="true"
+    style="position:absolute; left:-5000px; height:0; width:0; opacity:0;"
+  >
+
+  <div class="row">
+    <input class="input" name="name" placeholder="Full name *" required>
+    <input class="input" type="email" name="email" placeholder="Email *" required>
+  </div>
+
+  <div class="row">
+    <input class="input" name="phone" placeholder="Phone">
+    <input class="input" name="organization" placeholder="Organization">
+  </div>
+
+  <div class="row">
+    <select class="input" name="projectType" required>
+      <option value="">Project type *</option>
+      <option>Retrofit</option>
+      <option>New Build</option>
+    </select>
+
+    <select class="input" name="facility">
+      <option value="">Facility</option>
+      <option>Tennis</option>
+      <option>Football</option>
+      <option>Indoor Arena</option>
+      <option>Aquatic</option>
+      <option>Sports Complex</option>
+    </select>
+  </div>
+
+  <textarea
+    class="input"
+    name="message"
+    rows="4"
+    placeholder="Tell us about your project..."
+    required
+  ></textarea>
+
+  <button class="btn btn-cta" type="submit">Request a Quote</button>
+
+  <!-- Inline status -->
+  <p class="muted small" data-form-status style="display:none; margin-top:10px;"></p>
+</form>
     </div>
   </div>
 </section>
@@ -217,7 +316,7 @@
   <div class="container footer-grid">
     <div>
       <div class="brand cluster">
-        <img class="brand-mark" src="assets/img/logo-mark.svg" alt="" />
+        <img class="brand-mark" src="assets/img/Logo.png" alt="" />
         <span class="brand-text">Texas Sports Lighting</span>
       </div>
       <p class="muted">
