@@ -17,12 +17,8 @@
   <meta property="og:description" content="Texas Sports Lighting — LED sports lighting for every venue." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://texassportslighting.com/contact.html" />
-
-  <!-- Schema.org Organization -->
-  <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "Organization", "name": "Texas Sports Lighting", "url": "https://texassportslighting.com", "logo": "https://texassportslighting.com/assets/img/logo-mark.svg", "sameAs": ["https://www.facebook.com/", "https://www.instagram.com/"]}
-  </script>
 </head>
+
 <body>
 <header class="site-header">
   <div class="container header-inner">
@@ -56,13 +52,14 @@
             <li><a href="resources/blog.html">Blog</a></li>
           </ul>
         </li>
-<li><a href="retrofit-new-build.html">Retrofits &amp; New Build</a></li>
+        <li><a href="retrofit-new-build.html">Retrofits &amp; New Build</a></li>
         <li><a href="controls.html">Controls</a></li>
         <li><a class="btn btn-cta" href="tel:+1XXXXXXXXXX">Call</a></li>
       </ul>
     </nav>
   </div>
 </header>
+
 <main>
 
 <section class="section">
@@ -72,22 +69,30 @@
       <h1 class="title">Request a Quote</h1>
       <p class="lead">Tell us about your project. We'll follow up with next steps and a tailored plan.</p>
     </div>
+
     <div class="card">
-      <!-- Updated: action points to Vercel PHP Function; added honeypot + CSRF -->
-      <form class="form" data-validate action="/api/contact-submit.php" method="POST" accept-charset="UTF-8">
-        <!-- Honeypot (must stay empty) -->
-        <input type="text" name="website" autocomplete="off" tabindex="-1" style="position:absolute; left:-5000px; height:0; width:0; opacity:0;" aria-hidden="true">
-        <!-- CSRF token (set via script below) -->
-        <input type="hidden" name="csrf" id="csrf">
+      <!-- Resend-backed form (posts to /api/contact) -->
+      <form id="contactForm" class="form" novalidate>
+        <!-- Honeypot: bots fill this; humans should not -->
+        <input
+          type="text"
+          name="website"
+          autocomplete="off"
+          tabindex="-1"
+          aria-hidden="true"
+          style="position:absolute; left:-5000px; height:0; width:0; opacity:0;"
+        >
 
         <div class="row">
           <input class="input" name="name" placeholder="Full name *" required>
           <input class="input" type="email" name="email" placeholder="Email *" required>
         </div>
+
         <div class="row">
           <input class="input" name="phone" placeholder="Phone">
           <input class="input" name="organization" placeholder="Organization">
         </div>
+
         <div class="row">
           <select class="input" name="state">
             <option value="">State</option>
@@ -102,30 +107,39 @@
             <option>SD</option><option>TN</option><option>TX</option><option>UT</option><option>VT</option>
             <option>VA</option><option>WA</option><option>WV</option><option>WI</option><option>WY</option>
           </select>
+
           <select class="input" name="facility">
             <option value="">Facility</option>
             <option>Tennis</option><option>Football</option><option>Indoor Arena</option><option>Aquatic</option><option>Sports Complex</option>
           </select>
         </div>
+
         <div class="row">
           <select class="input" name="projectType" required>
             <option value="">Project type *</option>
             <option>Retrofit</option>
             <option>New Build</option>
           </select>
+
           <select class="input" name="timeline">
             <option value="">Timeline</option>
             <option>0–3 months</option><option>3–6 months</option><option>6–12 months</option><option>12+ months</option>
           </select>
         </div>
-        <textarea class="input" name="message" rows="5" placeholder="Describe your facility, goals, and any constraints..."></textarea>
-        <button class="btn btn-cta" type="submit">Submit</button>
+
+        <textarea class="input" name="message" rows="5" placeholder="Describe your facility, goals, and any constraints..." required></textarea>
+
+        <button id="contactSubmit" class="btn btn-cta" type="submit">Submit</button>
+
+        <!-- Inline status (no CSS changes required) -->
+        <p id="formStatus" class="muted small" style="margin-top:10px; display:none;"></p>
       </form>
     </div>
   </div>
 </section>
 
 </main>
+
 <footer class="site-footer">
   <div class="container footer-grid">
     <div>
@@ -171,24 +185,73 @@
   </div>
 </footer>
 
-<!-- CSRF: set a random token cookie + populate hidden input -->
 <script>
   (function () {
-    try {
-      var array = new Uint8Array(16);
-      window.crypto.getRandomValues(array);
-      var t = Array.from(array).map(function(b){return ('0' + b.toString(16)).slice(-2)}).join('');
-      document.cookie = 'csrf=' + t + '; Path=/; SameSite=Lax';
-      var el = document.getElementById('csrf');
-      if (el) el.value = t;
-    } catch (e) {
-      // Fallback if crypto isn’t available
-      var t2 = (Date.now().toString(36) + Math.random().toString(36).slice(2));
-      document.cookie = 'csrf=' + t2 + '; Path=/; SameSite=Lax';
-      var el2 = document.getElementById('csrf');
-      if (el2) el2.value = t2;
+    const form = document.getElementById("contactForm");
+    const statusEl = document.getElementById("formStatus");
+    const submitBtn = document.getElementById("contactSubmit");
+
+    function setStatus(msg, isError) {
+      statusEl.style.display = "block";
+      statusEl.textContent = msg;
+      statusEl.style.color = isError ? "#b42318" : "";
     }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      // Basic HTML validation
+      if (!form.checkValidity()) {
+        setStatus("Please fill out the required fields.", true);
+        return;
+      }
+
+      // Honeypot check (bots)
+      if ((form.website && form.website.value || "").trim().length > 0) {
+        // Pretend success to bots
+        setStatus("Thanks! We'll be in touch shortly.", false);
+        form.reset();
+        return;
+      }
+
+      submitBtn.disabled = true;
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = "Sending...";
+
+      const payload = {
+        name: form.name.value.trim(),
+        email: form.email.value.trim(),
+        phone: (form.phone.value || "").trim(),
+        organization: (form.organization.value || "").trim(),
+        state: (form.state.value || "").trim(),
+        facility: (form.facility.value || "").trim(),
+        projectType: (form.projectType.value || "").trim(),
+        timeline: (form.timeline.value || "").trim(),
+        message: (form.message.value || "").trim(),
+      };
+
+      try {
+        const r = await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+        if (r.ok) {
+          setStatus("Message sent! We'll follow up soon.", false);
+          form.reset();
+        } else {
+          setStatus("Something went wrong. Please try again.", true);
+        }
+      } catch (err) {
+        setStatus("Network error. Please try again.", true);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }
+    });
   })();
 </script>
+
 </body>
 </html>
