@@ -1,0 +1,49 @@
+import { supabaseAdmin } from "../_utils/supabase.js";
+import { requireAdmin } from "../_utils/auth.js";
+
+export default async function handler(req, res) {
+  const sb = supabaseAdmin();
+
+  if (req.method === "GET") {
+    const isAdmin = requireAdmin(req);
+
+    const query = sb
+      .from("posts")
+      .select("id,title,slug,excerpt,content,published,published_at,updated_at")
+      .order("published_at", { ascending: false });
+
+    const { data, error } = isAdmin
+      ? await query
+      : await query.eq("published", true);
+
+    if (error) return res.status(500).json({ ok: false, error: error.message });
+    return res.status(200).json({ ok: true, posts: data });
+  }
+
+  if (req.method === "POST") {
+    if (!requireAdmin(req)) return res.status(401).json({ ok: false });
+
+    const { title, slug, excerpt, content, published, published_at } = req.body || {};
+    if (!title || !slug || !content) {
+      return res.status(400).json({ ok: false, error: "Missing fields" });
+    }
+
+    const { data, error } = await sb
+      .from("posts")
+      .insert([{
+        title,
+        slug,
+        excerpt: excerpt || "",
+        content,
+        published: published !== false,
+        published_at: published_at || new Date().toISOString(),
+      }])
+      .select()
+      .single();
+
+    if (error) return res.status(500).json({ ok: false, error: error.message });
+    return res.status(200).json({ ok: true, post: data });
+  }
+
+  return res.status(405).json({ ok: false });
+}

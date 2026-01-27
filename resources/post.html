@@ -3,37 +3,17 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Blog • Texas Sports Lighting</title>
-  <meta name="description" content="Texas Sports Lighting — LED sports lighting for every venue." />
+  <title>Blog Post • Texas Sports Lighting</title>
+  <meta name="description" content="Texas Sports Lighting blog post." />
 
-  <!-- Favicon: use Logo.png -->
   <link rel="icon" href="/assets/img/Logo.png" type="image/png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Root assets (works from any subfolder like /resources/) -->
   <link rel="stylesheet" href="/assets/css/styles.css" />
   <script defer src="/assets/js/main.js"></script>
-
-  <!-- Open Graph -->
-  <meta property="og:title" content="Blog • Texas Sports Lighting" />
-  <meta property="og:description" content="Texas Sports Lighting — LED sports lighting for every venue." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://texassportslighting.com/resources/blog.html" />
-
-  <!-- Schema.org Organization -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "Texas Sports Lighting",
-    "url": "https://texassportslighting.com",
-    "logo": "https://texassportslighting.com/assets/img/Logo.png",
-    "sameAs": ["https://www.facebook.com/", "https://www.instagram.com/"]
-  }
-  </script>
 </head>
 
 <body>
@@ -71,13 +51,13 @@
           <button class="sub-toggle">Resources</button>
           <ul class="sub">
             <li><a href="/resources/gallery.html">Gallery</a></li>
-            <li><a href="/resources/blog.html" aria-current="page">Blog</a></li>
+            <li><a href="/resources/blog.html">Blog</a></li>
           </ul>
         </li>
 
         <li><a href="/retrofit-new-build.html">Retrofits &amp; New Build</a></li>
         <li><a href="/controls.html">Controls</a></li>
-        <li><a class="btn btn-cta" href="/contact.html">Contact</a></li>
+        <li><a class="btn btn-cta" href="tel:+1XXXXXXXXXX">Call</a></li>
       </ul>
     </nav>
   </div>
@@ -85,31 +65,15 @@
 
 <main>
 <section class="section">
-  <div class="container">
-    <span class="kicker">Resources</span>
-    <h1 class="title">Blog</h1>
-    <p class="lead">Publish updates, project spotlights, and tips.</p>
+  <div class="container" style="max-width: 820px;">
+    <a href="/resources/blog.html" class="kicker">← Back to Blog</a>
 
-    <div id="blogGrid" class="grid cards"></div>
+    <h1 id="postTitle" class="title" style="margin-top:.5rem;"></h1>
+    <p id="postMeta" class="muted small"></p>
 
-<script>
-(async function () {
-  const grid = document.getElementById("blogGrid");
-  const r = await fetch("/api/posts");
-  if (!r.ok) return;
-  const { posts } = await r.json();
+    <div id="postContent" class="content" style="margin-top:1.25rem;"></div>
 
-  grid.innerHTML = (posts || []).map(p => `
-    <article class="card">
-      <h3 class="card-title">
-        <a href="/resources/post.html?slug=${encodeURIComponent(p.slug)}">${p.title}</a>
-      </h3>
-      <p class="muted small">${new Date(p.published_at).toLocaleDateString()}</p>
-      <p class="muted">${p.excerpt || ""}</p>
-    </article>
-  `).join("");
-})();
-</script>
+    <p id="postStatus" class="muted small" style="margin-top:1.5rem;"></p>
   </div>
 </section>
 </main>
@@ -154,12 +118,66 @@
         <li><a href="mailto:info@texassportslighting.com">info@texassportslighting.com</a></li>
         <li><a href="/contact.html">Request a Quote</a></li>
       </ul>
-      <div class="social cluster">
-        <a href="#" aria-label="Facebook"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M13 22v-9h3l1-4h-4V7c0-1.03.34-2 2-2h2V1h-3c-3.09 0-5 1.91-5 5v3H6v4h3v9h4z"/></svg></a>
-        <a href="#" aria-label="Instagram"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M7 2C4.24 2 2 4.24 2 7v10c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5H7zm0 2h10c1.66 0 3 1.34 3 3v10c0 1.66-1.34 3-3 3H7c-1.66 0-3-1.34-3-3V7c0-1.66 1.34-3 3-3zm5 2a6 6 0 100 12A6 6 0 0012 6zm0 2a4 4 0 110 8 4 4 0 010-8zm6.5-.25a1.25 1.25 0 100 2.5 1.25 1.25 0 000-2.5z"/></svg></a>
-      </div>
     </div>
   </div>
 </footer>
+
+<script>
+(async function () {
+  const params = new URLSearchParams(window.location.search);
+  const slug = params.get("slug");
+
+  const titleEl = document.getElementById("postTitle");
+  const metaEl = document.getElementById("postMeta");
+  const contentEl = document.getElementById("postContent");
+  const statusEl = document.getElementById("postStatus");
+
+  if (!slug) {
+    statusEl.textContent = "No post specified.";
+    return;
+  }
+
+  try {
+    const r = await fetch("/api/posts");
+    if (!r.ok) throw new Error("Failed to load posts");
+
+    const { posts } = await r.json();
+    const post = (posts || []).find(p => p.slug === slug);
+
+    if (!post) {
+      statusEl.textContent = "Post not found.";
+      return;
+    }
+
+    // Set page title
+    document.title = `${post.title} • Texas Sports Lighting`;
+
+    titleEl.textContent = post.title;
+    metaEl.textContent =
+      `Published ${new Date(post.published_at).toLocaleDateString()}`;
+
+    // Render content (plain text -> HTML)
+    contentEl.innerHTML = (post.content || "")
+      .split("\n\n")
+      .map(p => `<p>${escapeHtml(p).replace(/\n/g, "<br>")}</p>`)
+      .join("");
+
+  } catch (err) {
+    statusEl.textContent = "Error loading post. Please try again later.";
+  }
+
+  function escapeHtml(str) {
+    return str.replace(/[&<>"']/g, function (m) {
+      return ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        "\"": "&quot;",
+        "'": "&#039;"
+      })[m];
+    });
+  }
+})();
+</script>
 </body>
 </html>

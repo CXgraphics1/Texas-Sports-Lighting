@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin • Texas Sports Lighting</title>
+  <link rel="stylesheet" href="/assets/css/styles.css" />
+  <style>
+    .admin-wrap { max-width: 980px; margin: 0 auto; padding: 2rem 1rem; }
+    .admin-grid { display: grid; gap: 1rem; grid-template-columns: 1fr; }
+    .admin-row { display:flex; gap: .75rem; flex-wrap: wrap; align-items:center; justify-content: space-between; }
+    .admin-row .btn { white-space: nowrap; }
+    .admin-list .card { cursor: pointer; }
+    textarea.input { min-height: 220px; }
+  </style>
+</head>
+<body>
+  <div class="admin-wrap">
+    <div class="admin-row">
+      <h1 class="title" style="margin:0;">Blog Admin</h1>
+      <div class="cluster">
+        <button id="newBtn" class="btn">New Post</button>
+        <button id="logoutBtn" class="btn">Logout</button>
+      </div>
+    </div>
+
+    <div id="loginCard" class="card" style="margin-top:1rem;">
+      <h2 class="card-title">Login</h2>
+      <p class="muted">Enter the admin password.</p>
+      <div class="row">
+        <input id="pw" class="input" type="password" placeholder="Password">
+        <button id="loginBtn" class="btn btn-cta">Login</button>
+      </div>
+      <p id="loginStatus" class="muted small" style="display:none;"></p>
+    </div>
+
+    <div id="app" style="display:none; margin-top:1rem;" class="admin-grid">
+      <div class="card">
+        <h2 class="card-title">Posts</h2>
+        <div id="posts" class="grid cards admin-list"></div>
+      </div>
+
+      <div class="card">
+        <h2 class="card-title" id="editorTitle">Editor</h2>
+
+        <input id="postId" type="hidden" />
+        <div class="row">
+          <input id="title" class="input" placeholder="Title *">
+          <input id="slug" class="input" placeholder="Slug (auto)">
+        </div>
+        <div class="row">
+          <input id="excerpt" class="input" placeholder="Excerpt (optional)">
+          <select id="published" class="input">
+            <option value="true">Published</option>
+            <option value="false">Draft</option>
+          </select>
+        </div>
+
+        <textarea id="content" class="input" placeholder="Write your post content here... (plain text for now)"></textarea>
+
+        <div class="admin-row" style="margin-top:.75rem;">
+          <p id="saveStatus" class="muted small" style="display:none;"></p>
+          <div class="cluster">
+            <button id="deleteBtn" class="btn" style="display:none;">Delete</button>
+            <button id="saveBtn" class="btn btn-cta">Save</button>
+          </div>
+        </div>
+
+        <p class="muted small" style="margin-top:.75rem;">
+          Tip: Slug becomes the URL like <code>/resources/post.html?slug=your-slug</code>
+        </p>
+      </div>
+    </div>
+  </div>
+
+<script>
+(function () {
+  const el = (id) => document.getElementById(id);
+
+  const loginCard = el("loginCard");
+  const app = el("app");
+  const loginStatus = el("loginStatus");
+  const saveStatus = el("saveStatus");
+  const postsEl = el("posts");
+
+  const state = { posts: [] };
+
+  function show(elm, on) { elm.style.display = on ? "" : "none"; }
+  function status(node, msg, isErr) {
+    node.style.display = "block";
+    node.textContent = msg;
+    node.style.color = isErr ? "#b42318" : "";
+  }
+
+  function slugify(s) {
+    return (s || "")
+      .toLowerCase()
+      .trim()
+      .replace(/['"]/g, "")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+  }
+
+  async function api(path, opts) {
+    const r = await fetch(path, {
+      headers: { "Content-Type": "application/json" },
+      ...opts
+    });
+    return { ok: r.ok, json: await r.json().catch(() => ({})) };
+  }
+
+  async function refresh() {
+    const r = await fetch("/api/posts");
+    if (!r.ok) return;
+    const data = await r.json();
+    state.posts = data.posts || [];
+    renderPosts();
+  }
+
+  function renderPosts() {
+    postsEl.innerHTML = "";
+    state.posts.forEach(p => {
+      const a = document.createElement("article");
+      a.className = "card";
+      a.innerHTML = `
+        <h3 class="card-title">${p.title}</h3>
+        <p class="muted small">${p.published ? "Published" : "Draft"} • ${new Date(p.published_at).toLocaleDateString()}</p>
+        <p class="muted">${(p.excerpt || "").slice(0, 120)}</p>
+      `;
+      a.addEventListener("click", () => loadIntoEditor(p));
+      postsEl.appendChild(a);
+    });
+  }
+
+  function clearEditor() {
+    el("postId").value = "";
+    el("title").value = "";
+    el("slug").value = "";
+    el("excerpt").value = "";
+    el("published").value = "true";
+    el("content").value = "";
+    show(el("deleteBtn"), false);
+    el("editorTitle").textContent = "Editor";
+  }
+
+  function loadIntoEditor(p) {
+    el("postId").value = p.id;
+    el("title").value = p.title || "";
+    el("slug").value = p.slug || "";
+    el("excerpt").value = p.excerpt || "";
+    el("published").value = String(!!p.published);
+    el("content").value = p.content || "";
+    show(el("deleteBtn"), true);
+    el("editorTitle").textContent = "Editing: " + (p.title || "");
+  }
+
+  el("title").addEventListener("input", () => {
+    if (!el("postId").value) el("slug").value = slugify(el("title").value);
+  });
+
+  el("loginBtn").addEventListener("click", async () => {
+    const password = el("pw").value;
+    const { ok, json } = await api("/api/admin/login", { method: "POST", body: JSON.stringify({ password }) });
+    if (!ok) return status(loginStatus, json.error || "Login failed.", true);
+
+    show(loginCard, false);
+    show(app, true);
+    clearEditor();
+    await refresh();
+  });
+
+  el("logoutBtn").addEventListener("click", async () => {
+    await fetch("/api/admin/logout");
+    location.reload();
+  });
+
+  el("newBtn").addEventListener("click", () => {
+    clearEditor();
+    el("editorTitle").textContent = "New Post";
+  });
+
+  el("saveBtn").addEventListener("click", async () => {
+    status(saveStatus, "Saving...", false);
+
+    const payload = {
+      title: el("title").value.trim(),
+      slug: (el("slug").value.trim() || slugify(el("title").value)),
+      excerpt: el("excerpt").value.trim(),
+      published: el("published").value === "true",
+      content: el("content").value.trim()
+    };
+
+    if (!payload.title || !payload.slug || !payload.content) {
+      return status(saveStatus, "Title, slug, and content are required.", true);
+    }
+
+    const id = el("postId").value;
+
+    const { ok, json } = id
+      ? await api(`/api/posts/${id}`, { method: "PUT", body: JSON.stringify(payload) })
+      : await api("/api/posts", { method: "POST", body: JSON.stringify(payload) });
+
+    if (!ok) return status(saveStatus, json.error || "Save failed.", true);
+
+    status(saveStatus, "Saved!", false);
+    await refresh();
+
+    // re-load saved post into editor (esp. after create)
+    const saved = json.post;
+    if (saved) loadIntoEditor(saved);
+  });
+
+  el("deleteBtn").addEventListener("click", async () => {
+    const id = el("postId").value;
+    if (!id) return;
+
+    if (!confirm("Delete this post?")) return;
+    const { ok, json } = await api(`/api/posts/${id}`, { method: "DELETE" });
+    if (!ok) return alert(json.error || "Delete failed.");
+
+    clearEditor();
+    await refresh();
+  });
+
+})();
+</script>
+</body>
+</html>
