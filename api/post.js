@@ -1,11 +1,15 @@
-import { supabaseAdmin } from "../_utils/supabase.js";
-import { requireAdmin } from "../_utils/auth.js";
+import { supabaseAdmin } from "./_utils/supabase.js";
+import { requireAdmin } from "./_utils/auth.js";
 
 export default async function handler(req, res) {
-  if (!requireAdmin(req)) return res.status(401).json({ ok: false });
+  if (!requireAdmin(req)) {
+    return res.status(401).json({ ok: false, error: "Not logged in." });
+  }
 
   const sb = supabaseAdmin();
-  const { id } = req.query;
+  const id = req.query.id;
+
+  if (!id) return res.status(400).json({ ok: false, error: "Missing id" });
 
   if (req.method === "PUT") {
     const { title, slug, excerpt, content, published, published_at } = req.body || {};

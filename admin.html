@@ -197,7 +197,7 @@
     const id = el("postId").value;
 
     const { ok, json } = id
-      ? await api(`/api/posts/${id}`, { method: "PUT", body: JSON.stringify(payload) })
+      ? await api(`/api/post?id=${encodeURIComponent(id)}`, { method: "PUT", body: JSON.stringify(payload) })
       : await api("/api/posts", { method: "POST", body: JSON.stringify(payload) });
 
     if (!ok) return status(saveStatus, json.error || "Save failed.", true);
@@ -215,7 +215,7 @@
     if (!id) return;
 
     if (!confirm("Delete this post?")) return;
-    const { ok, json } = await api(`/api/posts/${id}`, { method: "DELETE" });
+    const { ok, json } = await api(`/api/post?id=${encodeURIComponent(id)}`, { method: "DELETE" });
     if (!ok) return alert(json.error || "Delete failed.");
 
     clearEditor();
