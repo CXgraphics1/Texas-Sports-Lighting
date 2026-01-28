@@ -630,3 +630,39 @@ a:hover{color:var(--brand-accent)}
     order: -1; /* put the card above or below if you prefer; remove if not desired */
   }
 }
+
+/* Blog post typography */
+.content {
+  line-height: 1.75;
+  font-size: 1.05rem;
+}
+
+.content h2 { margin-top: 1.75rem; }
+.content h3 { margin-top: 1.25rem; }
+
+.content p { margin: 0 0 1rem; }
+
+.content a { text-decoration: underline; }
+
+.post-img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border-radius: 14px;
+  display: block;
+  margin: 1.25rem 0;
+  box-shadow: 0 10px 30px rgba(0,0,0,.12);
+}
+
+.content ul, .content ol {
+  padding-left: 1.25rem;
+  margin: 0 0 1rem;
+}
+
+.content blockquote {
+  margin: 1.25rem 0;
+  padding: 1rem 1.25rem;
+  border-left: 4px solid rgba(0,0,0,.15);
+  background: rgba(255,255,255,.6);
+  border-radius: 12px;
+}

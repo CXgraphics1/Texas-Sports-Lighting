@@ -56,6 +56,12 @@
           </select>
         </div>
 
+        <div class="row">
+          <input id="imageFile" class="input" type="file" accept="image/*">
+          <button id="uploadBtn" class="btn">Upload Image</button>
+          </div>
+        <p class="muted small" id="uploadStatus" style="display:none;"></p>
+
         <textarea id="content" class="input" placeholder="Write your post content here... (plain text for now)"></textarea>
 
         <div class="admin-row" style="margin-top:.75rem;">
@@ -241,6 +247,38 @@
   });
 
 })();
+
+const uploadStatus = el("uploadStatus");
+
+function setUploadStatus(msg, isErr) {
+  uploadStatus.style.display = "block";
+  uploadStatus.textContent = msg;
+  uploadStatus.style.color = isErr ? "#b42318" : "";
+}
+
+el("uploadBtn").addEventListener("click", async () => {
+  const fileInput = el("imageFile");
+  const f = fileInput.files && fileInput.files[0];
+  if (!f) return setUploadStatus("Choose an image first.", true);
+
+  setUploadStatus("Uploading...", false);
+
+  const fd = new FormData();
+  fd.append("file", f);
+
+  const r = await fetch("/api/upload", { method: "POST", body: fd });
+  const json = await r.json().catch(() => ({}));
+
+  if (!r.ok) return setUploadStatus(json.error || "Upload failed.", true);
+
+  // Insert image tag into content
+  const url = json.url;
+  const tag = `\n\n<img src="${url}" alt="" class="post-img">\n\n`;
+  el("content").value = (el("content").value || "") + tag;
+
+  setUploadStatus("Uploaded + inserted into post.", false);
+  fileInput.value = "";
+});
 </script>
 </body>
 </html>

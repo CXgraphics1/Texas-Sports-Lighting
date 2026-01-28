@@ -14,6 +14,36 @@
 
   <link rel="stylesheet" href="/assets/css/styles.css" />
   <script defer src="/assets/js/main.js"></script>
+
+  <!-- Optional: nicer post defaults without editing your main CSS -->
+  <style>
+    /* Blog post typography + media */
+    .content { line-height: 1.75; font-size: 1.05rem; }
+    .content h2 { margin-top: 1.75rem; }
+    .content h3 { margin-top: 1.25rem; }
+    .content p { margin: 0 0 1rem; }
+    .content a { text-decoration: underline; }
+    .content ul, .content ol { padding-left: 1.25rem; margin: 0 0 1rem; }
+    .content blockquote {
+      margin: 1.25rem 0;
+      padding: 1rem 1.25rem;
+      border-left: 4px solid rgba(255,255,255,.25);
+      background: rgba(255,255,255,.06);
+      border-radius: 12px;
+    }
+    .content img, .post-img {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      border-radius: 14px;
+      display: block;
+      margin: 1.25rem 0;
+      box-shadow: 0 10px 30px rgba(0,0,0,.12);
+    }
+    .content hr { border: none; height: 1px; background: rgba(255,255,255,.12); margin: 2rem 0; }
+    .post-meta-row { display:flex; gap:.75rem; flex-wrap:wrap; align-items:center; justify-content: space-between; }
+    .post-meta-row .muted { margin: 0; }
+  </style>
 </head>
 
 <body>
@@ -69,7 +99,11 @@
     <a href="/resources/blog.html" class="kicker">← Back to Blog</a>
 
     <h1 id="postTitle" class="title" style="margin-top:.5rem;"></h1>
-    <p id="postMeta" class="muted small"></p>
+
+    <div class="post-meta-row" style="margin-top:.35rem;">
+      <p id="postMeta" class="muted small"></p>
+      <p id="postExcerpt" class="muted small" style="display:none;"></p>
+    </div>
 
     <div id="postContent" class="content" style="margin-top:1.25rem;"></div>
 
@@ -129,6 +163,7 @@
 
   const titleEl = document.getElementById("postTitle");
   const metaEl = document.getElementById("postMeta");
+  const excerptEl = document.getElementById("postExcerpt");
   const contentEl = document.getElementById("postContent");
   const statusEl = document.getElementById("postStatus");
 
@@ -149,25 +184,44 @@
       return;
     }
 
-    // Set page title
+    // Page title + meta
     document.title = `${post.title} • Texas Sports Lighting`;
-
     titleEl.textContent = post.title;
-    metaEl.textContent =
-      `Published ${new Date(post.published_at).toLocaleDateString()}`;
 
-    // Render content (plain text -> HTML)
-    contentEl.innerHTML = (post.content || "")
-      .split("\n\n")
-      .map(p => `<p>${escapeHtml(p).replace(/\n/g, "<br>")}</p>`)
-      .join("");
+    const dateStr = post.published_at
+      ? new Date(post.published_at).toLocaleDateString()
+      : "";
+
+    const bits = [];
+    if (dateStr) bits.push(`Published ${dateStr}`);
+    if (post.updated_at) {
+      const upd = new Date(post.updated_at).toLocaleDateString();
+      if (upd && upd !== dateStr) bits.push(`Updated ${upd}`);
+    }
+    metaEl.textContent = bits.join(" • ");
+
+    if (post.excerpt && String(post.excerpt).trim()) {
+      excerptEl.style.display = "";
+      excerptEl.textContent = post.excerpt;
+    }
+
+    // ✅ Updated: render admin-controlled HTML directly (so images + headings work)
+    contentEl.innerHTML = (post.content || "");
+
+    // Safety: if they typed plain text (no tags), make it readable
+    if (!/[<][a-z][\s\S]*[>]/i.test(post.content || "")) {
+      contentEl.innerHTML = (post.content || "")
+        .split("\n\n")
+        .map(p => `<p>${escapeHtml(p).replace(/\n/g, "<br>")}</p>`)
+        .join("");
+    }
 
   } catch (err) {
     statusEl.textContent = "Error loading post. Please try again later.";
   }
 
   function escapeHtml(str) {
-    return str.replace(/[&<>"']/g, function (m) {
+    return String(str).replace(/[&<>"']/g, function (m) {
       return ({
         "&": "&amp;",
         "<": "&lt;",
