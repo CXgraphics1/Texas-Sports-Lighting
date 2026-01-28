@@ -180,35 +180,53 @@
   });
 
   el("saveBtn").addEventListener("click", async () => {
-    status(saveStatus, "Saving...", false);
+  status(saveStatus, "Saving...", false);
 
-    const payload = {
-      title: el("title").value.trim(),
-      slug: (el("slug").value.trim() || slugify(el("title").value)),
-      excerpt: el("excerpt").value.trim(),
-      published: el("published").value === "true",
-      content: el("content").value.trim()
-    };
+  const payload = {
+    title: el("title").value.trim(),
+    slug: (el("slug").value.trim() || slugify(el("title").value)),
+    excerpt: el("excerpt").value.trim(),
+    published: el("published").value === "true",
+    content: el("content").value.trim()
+  };
 
-    if (!payload.title || !payload.slug || !payload.content) {
-      return status(saveStatus, "Title, slug, and content are required.", true);
-    }
+  if (!payload.title || !payload.slug || !payload.content) {
+    return status(saveStatus, "Title, slug, and content are required.", true);
+  }
 
-    const id = el("postId").value;
+  const id = el("postId").value.trim();
 
-    const { ok, json } = id
-      ? await api(`/api/post?id=${encodeURIComponent(id)}`, { method: "PUT", body: JSON.stringify(payload) })
-      : await api("/api/posts", { method: "POST", body: JSON.stringify(payload) });
+  // ✅ CREATE (no id)
+  if (!id) {
+    const { ok, json } = await api("/api/posts", {
+      method: "POST",
+      body: JSON.stringify(payload)
+    });
 
-    if (!ok) return status(saveStatus, json.error || "Save failed.", true);
+    if (!ok) return status(saveStatus, json.error || "Create failed.", true);
 
     status(saveStatus, "Saved!", false);
     await refresh();
 
-    // re-load saved post into editor (esp. after create)
-    const saved = json.post;
-    if (saved) loadIntoEditor(saved);
+    if (json.post && json.post.id) {
+      loadIntoEditor(json.post);
+    }
+    return;
+  }
+
+  // ✅ UPDATE (requires id)
+  const { ok, json } = await api(`/api/post?id=${encodeURIComponent(id)}`, {
+    method: "PUT",
+    body: JSON.stringify(payload)
   });
+
+  if (!ok) return status(saveStatus, json.error || "Update failed.", true);
+
+  status(saveStatus, "Updated!", false);
+  await refresh();
+
+  if (json.post) loadIntoEditor(json.post);
+});
 
   el("deleteBtn").addEventListener("click", async () => {
     const id = el("postId").value;
