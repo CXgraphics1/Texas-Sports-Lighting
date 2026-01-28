@@ -88,6 +88,7 @@
   const loginStatus = el("loginStatus");
   const saveStatus = el("saveStatus");
   const postsEl = el("posts");
+  const uploadStatus = el("uploadStatus");
 
   const state = { posts: [] };
 
@@ -147,6 +148,7 @@
     el("content").value = "";
     show(el("deleteBtn"), false);
     el("editorTitle").textContent = "Editor";
+    uploadStatus.style.display = "none";
   }
 
   function loadIntoEditor(p) {
@@ -158,15 +160,21 @@
     el("content").value = p.content || "";
     show(el("deleteBtn"), true);
     el("editorTitle").textContent = "Editing: " + (p.title || "");
+    uploadStatus.style.display = "none";
   }
 
   el("title").addEventListener("input", () => {
     if (!el("postId").value) el("slug").value = slugify(el("title").value);
   });
 
+  // ---------- LOGIN ----------
   el("loginBtn").addEventListener("click", async () => {
     const password = el("pw").value;
-    const { ok, json } = await api("/api/admin/login", { method: "POST", body: JSON.stringify({ password }) });
+    const { ok, json } = await api("/api/admin/login", {
+      method: "POST",
+      body: JSON.stringify({ password })
+    });
+
     if (!ok) return status(loginStatus, json.error || "Login failed.", true);
 
     show(loginCard, false);
@@ -185,60 +193,61 @@
     el("editorTitle").textContent = "New Post";
   });
 
+  // ---------- SAVE ----------
   el("saveBtn").addEventListener("click", async () => {
-  status(saveStatus, "Saving...", false);
+    status(saveStatus, "Saving...", false);
 
-  const payload = {
-    title: el("title").value.trim(),
-    slug: (el("slug").value.trim() || slugify(el("title").value)),
-    excerpt: el("excerpt").value.trim(),
-    published: el("published").value === "true",
-    content: el("content").value.trim()
-  };
+    const payload = {
+      title: el("title").value.trim(),
+      slug: (el("slug").value.trim() || slugify(el("title").value)),
+      excerpt: el("excerpt").value.trim(),
+      published: el("published").value === "true",
+      content: el("content").value.trim()
+    };
 
-  if (!payload.title || !payload.slug || !payload.content) {
-    return status(saveStatus, "Title, slug, and content are required.", true);
-  }
+    if (!payload.title || !payload.slug || !payload.content) {
+      return status(saveStatus, "Title, slug, and content are required.", true);
+    }
 
-  const id = el("postId").value.trim();
+    const id = el("postId").value.trim();
 
-  // ✅ CREATE (no id)
-  if (!id) {
-    const { ok, json } = await api("/api/posts", {
-      method: "POST",
+    // CREATE
+    if (!id) {
+      const { ok, json } = await api("/api/posts", {
+        method: "POST",
+        body: JSON.stringify(payload)
+      });
+
+      if (!ok) return status(saveStatus, json.error || "Create failed.", true);
+
+      status(saveStatus, "Saved!", false);
+      await refresh();
+
+      if (json.post && json.post.id) loadIntoEditor(json.post);
+      return;
+    }
+
+    // UPDATE
+    const { ok, json } = await api(`/api/post?id=${encodeURIComponent(id)}`, {
+      method: "PUT",
       body: JSON.stringify(payload)
     });
 
-    if (!ok) return status(saveStatus, json.error || "Create failed.", true);
+    if (!ok) return status(saveStatus, json.error || "Update failed.", true);
 
-    status(saveStatus, "Saved!", false);
+    status(saveStatus, "Updated!", false);
     await refresh();
 
-    if (json.post && json.post.id) {
-      loadIntoEditor(json.post);
-    }
-    return;
-  }
-
-  // ✅ UPDATE (requires id)
-  const { ok, json } = await api(`/api/post?id=${encodeURIComponent(id)}`, {
-    method: "PUT",
-    body: JSON.stringify(payload)
+    if (json.post) loadIntoEditor(json.post);
   });
 
-  if (!ok) return status(saveStatus, json.error || "Update failed.", true);
-
-  status(saveStatus, "Updated!", false);
-  await refresh();
-
-  if (json.post) loadIntoEditor(json.post);
-});
-
+  // ---------- DELETE ----------
   el("deleteBtn").addEventListener("click", async () => {
     const id = el("postId").value;
     if (!id) return;
 
     if (!confirm("Delete this post?")) return;
+
     const { ok, json } = await api(`/api/post?id=${encodeURIComponent(id)}`, { method: "DELETE" });
     if (!ok) return alert(json.error || "Delete failed.");
 
@@ -246,39 +255,39 @@
     await refresh();
   });
 
+  // ---------- UPLOAD IMAGE ----------
+  function setUploadStatus(msg, isErr) {
+    uploadStatus.style.display = "block";
+    uploadStatus.textContent = msg;
+    uploadStatus.style.color = isErr ? "#b42318" : "";
+  }
+
+  el("uploadBtn").addEventListener("click", async () => {
+    const fileInput = el("imageFile");
+    const f = fileInput.files && fileInput.files[0];
+    if (!f) return setUploadStatus("Choose an image first.", true);
+
+    setUploadStatus("Uploading...", false);
+
+    const fd = new FormData();
+    fd.append("file", f);
+
+    const r = await fetch("/api/upload", { method: "POST", body: fd });
+    const json = await r.json().catch(() => ({}));
+
+    if (!r.ok) return setUploadStatus(json.error || "Upload failed.", true);
+
+    const url = json.url;
+
+    // Insert image tag into content textarea (THIS is what gets saved to the table)
+    const tag = `\n\n<img src="${url}" alt="" class="post-img">\n\n`;
+    el("content").value = (el("content").value || "") + tag;
+
+    setUploadStatus("Uploaded + inserted. Now click Save.", false);
+    fileInput.value = "";
+  });
+
 })();
-
-const uploadStatus = el("uploadStatus");
-
-function setUploadStatus(msg, isErr) {
-  uploadStatus.style.display = "block";
-  uploadStatus.textContent = msg;
-  uploadStatus.style.color = isErr ? "#b42318" : "";
-}
-
-el("uploadBtn").addEventListener("click", async () => {
-  const fileInput = el("imageFile");
-  const f = fileInput.files && fileInput.files[0];
-  if (!f) return setUploadStatus("Choose an image first.", true);
-
-  setUploadStatus("Uploading...", false);
-
-  const fd = new FormData();
-  fd.append("file", f);
-
-  const r = await fetch("/api/upload", { method: "POST", body: fd });
-  const json = await r.json().catch(() => ({}));
-
-  if (!r.ok) return setUploadStatus(json.error || "Upload failed.", true);
-
-  // Insert image tag into content
-  const url = json.url;
-  const tag = `\n\n<img src="${url}" alt="" class="post-img">\n\n`;
-  el("content").value = (el("content").value || "") + tag;
-
-  setUploadStatus("Uploaded + inserted into post.", false);
-  fileInput.value = "";
-});
 </script>
 </body>
 </html>
