@@ -280,8 +280,16 @@
     const url = json.url;
 
     // Insert image tag into content textarea (THIS is what gets saved to the table)
-    const tag = `\n\n<img src="${url}" alt="" class="post-img">\n\n`;
-    el("content").value = (el("content").value || "") + tag;
+    const defaultCaption = "Add image caption here";
+
+    const tag = `
+    <figure class="post-figure">
+      <img src="${url}" alt="${defaultCaption}" class="post-img">
+      <figcaption class="img-caption">${defaultCaption}</figcaption>
+    </figure>
+    `;
+
+    el("content").value += "\n\n" + tag + "\n\n";
 
     setUploadStatus("Uploaded + inserted. Now click Save.", false);
     fileInput.value = "";
