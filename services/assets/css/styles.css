@@ -697,3 +697,26 @@ a:hover{color:var(--brand-accent)}
   font-size: 0.85rem;
   color: #6b7280;
 }
+.service-media {
+  overflow: hidden;
+  padding: 0;
+}
+
+.service-media img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  display: block;
+}
+
+.service-media .media-body {
+  padding: 1rem;
+}
+
+.service-media .media-body .muted {
+  margin: 0.35rem 0 0;
+}
+
+@media (max-width: 860px) {
+  .service-media img { height: 220px; }
+}
