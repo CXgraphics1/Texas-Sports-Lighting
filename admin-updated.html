@@ -255,6 +255,22 @@
       padding:1rem;
       z-index: 50;
     }
+    /* Quill alignment classes (needed for preview + public rendering) */
+    .content .ql-align-center { text-align: center; }
+    .content .ql-align-right { text-align: right; }
+    .content .ql-align-justify { text-align: justify; }
+
+    /* Make images respect alignment by being inline-block */
+    .content p img { display: inline-block; }
+
+    /* Optional: if Quill inserts videos (iframe) */
+    .content .ql-video {
+      width: 100%;
+      max-width: 100%;
+      aspect-ratio: 16 / 9;
+      height: auto;
+    }
+
   </style>
 </head>
 
