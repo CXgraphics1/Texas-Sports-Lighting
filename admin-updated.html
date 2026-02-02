@@ -5,135 +5,451 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Admin • Texas Sports Lighting</title>
   <link rel="stylesheet" href="/assets/css/styles.css" />
-<!-- Quill (rich text editor) -->
-  <link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet">
-  <style>
-    .admin-wrap { max-width: 980px; margin: 0 auto; padding: 2rem 1rem; }
-    .admin-grid { display: grid; gap: 1rem; grid-template-columns: 1fr; }
-    .admin-row { display:flex; gap: .75rem; flex-wrap: wrap; align-items:center; justify-content: space-between; }
-    .admin-row .btn { white-space: nowrap; }
-    .admin-list .card { cursor: pointer; }
-    textarea.input { min-height: 220px; }
 
-    /* Quill editor to feel like the site's inputs */
-    .ql-toolbar.ql-snow, .ql-container.ql-snow { border-color: rgba(0,0,0,.12); }
-    .ql-toolbar.ql-snow { border-radius: 12px 12px 0 0; background: rgba(255,255,255,.9); }
-    .ql-container.ql-snow { border-radius: 0 0 12px 12px; background: #fff; }
-    .ql-editor { min-height: 260px; font-size: 1rem; line-height: 1.7; }
-    /* Keep blog post content looking like your post page */
-    .editor-preview .content h1, .editor-preview .content h2, .editor-preview .content h3 { margin: .9em 0 .4em; }
-    .editor-preview .content p { margin: .65em 0; }
-    .editor-preview .content img { max-width: 100%; height: auto; border-radius: 12px; }
+  <!-- Quill -->
+  <link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: #ffffff;
+      --muted:#6b7280;
+      --line: rgba(0,0,0,.10);
+      --card:#fff;
+      --shadow: 0 10px 24px rgba(0,0,0,.06);
+      --radius: 12px;
+      --blue: #1a73e8;
+      --blue2:#0b57d0;
+      --danger:#b42318;
+    }
+
+    body { background: var(--bg); }
+
+    .admin-wrap{
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 3rem;
+    }
+
+    /* Topbar (iPage-like) */
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .topbar h1{
+      font-size: 2rem;
+      margin: 0;
+      letter-spacing: -0.02em;
+    }
+    .top-actions{
+      display:flex;
+      align-items:center;
+      gap:.75rem;
+      flex-wrap:wrap;
+    }
+    .link-btn{
+      border: 1px solid var(--line);
+      background:#f8fafc;
+      padding:.6rem .9rem;
+      border-radius: 10px;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:.5rem;
+      color:#0f172a;
+      text-decoration:none;
+      font-size:.9rem;
+      line-height:1;
+      white-space: nowrap;
+    }
+    .link-btn:hover{ background:#f1f5f9; }
+
+    .btn-primary{
+      border: 0;
+      background: var(--blue);
+      color:#fff;
+      padding:.65rem 1rem;
+      border-radius: 10px;
+      cursor:pointer;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+    .btn-primary:hover{ background: var(--blue2); }
+
+    .btn-ghost{
+      border:0;
+      background: transparent;
+      color: var(--blue);
+      cursor:pointer;
+      font-weight:650;
+      padding:.65rem .6rem;
+      border-radius: 10px;
+      white-space: nowrap;
+    }
+    .btn-ghost:hover{ background:#eff6ff; }
+
+    /* Cards + inputs */
+    .card{
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .card-pad{ padding: 1.25rem; }
+    .muted{ color: var(--muted); }
+    .small{ font-size:.9rem; }
+    .row{ display:flex; gap:.75rem; flex-wrap:wrap; }
+    .input{
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: .75rem .9rem;
+      background:#fff;
+      font-size: 1rem;
+    }
+    .field-label{
+      font-size:.8rem;
+      color: var(--muted);
+      margin: .25rem 0 .35rem;
+    }
+
+    /* App layout */
+    .admin-grid{ display:grid; gap: 1rem; grid-template-columns: 1fr; }
+
+    /* Posts list grid */
+    #posts.grid.cards{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    @media (max-width: 980px){
+      #posts.grid.cards{ grid-template-columns: 1fr; }
+    }
+
+    /* Meta grid (left fields + right cover) */
+    .meta-grid{
+      display:grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 1rem;
+      align-items: stretch;
+    }
+    @media (max-width: 980px){
+      .meta-grid{ grid-template-columns: 1fr; }
+    }
+
+    /* Cover tile */
+    .cover-tile{
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background:#f3f4f6;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height: 140px;
+      cursor:pointer;
+      position:relative;
+      overflow:hidden;
+    }
+    .cover-tile:hover{ filter: brightness(.99); }
+
+    .cover-preview{
+      position:absolute;
+      inset:0;
+      background-size: cover;
+      background-position:center;
+    }
+    .cover-overlay{
+      position:absolute;
+      inset:0;
+      background: linear-gradient(0deg, rgba(0,0,0,.25), rgba(0,0,0,.10));
+    }
+    .cover-inner{
+      position: relative;
+      z-index: 2;
+      background: rgba(0,0,0,.25);
+      color:#fff;
+      padding:.75rem 1rem;
+      border-radius: 10px;
+      display:inline-flex;
+      align-items:center;
+      gap:.6rem;
+      font-weight:650;
+    }
+
+    .cover-actions{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:.75rem;
+      margin-top:.75rem;
+    }
+
+    /* Editor shell */
+    .editor-shell{
+      margin-top: 1rem;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow:hidden;
+      background:#fff;
+    }
+    .editor-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:.75rem;
+      padding: .75rem .75rem;
+      border-bottom: 1px solid var(--line);
+      background:#fff;
+      flex-wrap: wrap;
+    }
+    .pill{
+      font-size:.85rem;
+      padding:.3rem .6rem;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background:#f8fafc;
+      color:#334155;
+    }
+
+    /* Quill match */
+    .ql-toolbar.ql-snow, .ql-container.ql-snow { border: 0 !important; }
+    .ql-toolbar.ql-snow{
+      border-bottom: 1px solid var(--line) !important;
+      background:#fff;
+      padding: .6rem .6rem;
+    }
+    .ql-container.ql-snow{ background:#fff; }
+    .ql-editor{
+      min-height: 380px;
+      font-size: 1rem;
+      line-height: 1.85;
+      padding: 1rem 1rem;
+    }
+
+    /* Preview */
+    .preview-card{ margin-top: 1rem; }
+    .preview-card h3{ margin:0; padding: 1rem 1rem 0; }
+    .preview-card .content{ padding: 1rem 1rem 1.25rem; }
+
+    /* Content formatting parity */
+    .content h1,.content h2,.content h3{ margin: .9em 0 .45em; }
+    .content p{ margin:.65em 0; }
+    .content img{ max-width:100%; height:auto; border-radius:12px; }
+    .content blockquote{
+      border-left: 4px solid rgba(37,99,235,.35);
+      padding-left: .9rem;
+      color:#334155;
+      margin: .9rem 0;
+    }
+
+    /* Status */
+    .status-line{ display:none; margin-top:.5rem; }
+    .danger{ color: var(--danger); }
+
+    /* Modal */
+    #scheduleModal{
+      display:none;
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.35);
+      align-items:center;
+      justify-content:center;
+      padding:1rem;
+      z-index: 50;
+    }
   </style>
 </head>
+
 <body>
   <div class="admin-wrap">
-    <div class="admin-row">
-      <h1 class="title" style="margin:0;">Blog Admin</h1>
-      <div class="cluster">
-        <button id="newBtn" class="btn">New Post</button>
-        <button id="logoutBtn" class="btn">Logout</button>
+
+    <!-- TOP BAR -->
+    <div class="topbar">
+      <div style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+        <h1>Add new post</h1>
+        <a class="link-btn" href="/resources/" title="Return to blog">← RETURN TO BLOG</a>
+      </div>
+
+      <div class="top-actions">
+        <button id="scheduleTopBtn" class="btn-ghost" type="button">SCHEDULE</button>
+        <button id="publishTopBtn" class="btn-primary" type="button">PUBLISH</button>
+        <button id="logoutBtn" class="link-btn" type="button">Logout</button>
       </div>
     </div>
 
-    <div id="loginCard" class="card" style="margin-top:1rem;">
-      <h2 class="card-title">Login</h2>
-      <p class="muted">Enter the admin password.</p>
+    <!-- LOGIN -->
+    <div id="loginCard" class="card card-pad" style="margin-top:1rem;">
+      <h2 style="margin:0 0 .25rem;">Login</h2>
+      <p class="muted" style="margin:.25rem 0 1rem;">Enter the admin password.</p>
       <div class="row">
         <input id="pw" class="input" type="password" placeholder="Password">
-        <button id="loginBtn" class="btn btn-cta">Login</button>
+        <button id="loginBtn" class="btn-primary" style="white-space:nowrap;" type="button">Login</button>
       </div>
-      <p id="loginStatus" class="muted small" style="display:none;"></p>
+      <p id="loginStatus" class="muted small status-line"></p>
     </div>
 
+    <!-- APP -->
     <div id="app" style="display:none; margin-top:1rem;" class="admin-grid">
-      <div class="card">
-        <h2 class="card-title">Posts</h2>
-        <div id="posts" class="grid cards admin-list"></div>
+
+      <!-- POSTS LIST -->
+      <div class="card card-pad">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap;">
+          <h2 style="margin:0;">Posts</h2>
+          <button id="newBtn" class="link-btn" type="button">+ New Post</button>
+        </div>
+        <div id="posts" class="grid cards admin-list" style="margin-top:1rem;"></div>
       </div>
 
-      <div class="card">
-        <h2 class="card-title" id="editorTitle">Editor</h2>
-
+      <!-- EDITOR -->
+      <div>
         <input id="postId" type="hidden" />
-        <div class="row">
-          <input id="title" class="input" placeholder="Title *">
-          <input id="slug" class="input" placeholder="Slug (auto)">
-        </div>
-        <div class="row">
-          <input id="excerpt" class="input" placeholder="Excerpt (optional)">
-          <select id="published" class="input">
-            <option value="true">Published</option>
-            <option value="false">Draft</option>
-          </select>
-        </div>
+        <input id="coverUrl" type="hidden" />
+        <input id="scheduledAt" type="hidden" />
+        <input id="publishedAtHidden" type="hidden" />
 
-        <div class="row">
-          <input id="imageFile" class="input" type="file" accept="image/*">
-          <button id="uploadBtn" class="btn">Upload Image</button>
+        <!-- META GRID -->
+        <div class="meta-grid">
+          <!-- LEFT -->
+          <div class="card card-pad">
+            <div class="field-label">Title</div>
+            <input id="title" class="input" placeholder="Title of your story *">
+
+            <div class="row" style="margin-top:.9rem;">
+              <div style="flex:1; min-width:240px;">
+                <div class="field-label">Slug</div>
+                <input id="slug" class="input" placeholder="Slug (auto)">
+              </div>
+              <div style="flex:1; min-width:240px;">
+                <div class="field-label">Excerpt</div>
+                <input id="excerpt" class="input" placeholder="Short excerpt (optional)">
+              </div>
+            </div>
+
+            <div class="row" style="margin-top:.9rem;">
+              <div style="flex:1; min-width:240px;">
+                <div class="field-label">Status</div>
+                <select id="published" class="input">
+                  <option value="false">Draft</option>
+                  <option value="true">Published</option>
+                </select>
+              </div>
+            </div>
+
+            <p class="muted small" style="margin:.75rem 0 0;">
+              Tip: Slug becomes the URL like <code>/resources/post.html?slug=your-slug</code>
+            </p>
           </div>
-        <p class="muted small" id="uploadStatus" style="display:none;"></p>
 
-        <div class="row" style="align-items:flex-start; gap:1rem;">
-  <div style="flex:1; min-width: 280px;">
-    <div class="muted small" style="margin:.25rem 0 .5rem;">
-      Format your post like a normal editor (no HTML needed). Use the toolbar for headings, lists, quotes, links, and images.
-    </div>
+          <!-- RIGHT -->
+          <div class="card card-pad">
+            <div class="field-label">Cover image</div>
 
-    <div id="toolbar">
-      <span class="ql-formats">
-        <select class="ql-header">
-          <option selected></option>
-          <option value="2"></option>
-          <option value="3"></option>
-        </select>
-      </span>
-      <span class="ql-formats">
-        <button class="ql-bold"></button>
-        <button class="ql-italic"></button>
-        <button class="ql-underline"></button>
-      </span>
-      <span class="ql-formats">
-        <button class="ql-blockquote"></button>
-        <button class="ql-list" value="ordered"></button>
-        <button class="ql-list" value="bullet"></button>
-      </span>
-      <span class="ql-formats">
-        <button class="ql-link"></button>
-        <button class="ql-image"></button>
-      </span>
-      <span class="ql-formats">
-        <button class="ql-clean"></button>
-      </span>
-    </div>
+            <div id="coverTile" class="cover-tile" role="button" tabindex="0" aria-label="Add cover image">
+              <div class="cover-preview" id="coverPreview" style="display:none;"></div>
+              <div class="cover-overlay" id="coverOverlay" style="display:none;"></div>
+              <div class="cover-inner" id="coverInner">⬆️ Add cover image</div>
+              <input id="coverFile" type="file" accept="image/*" style="display:none;">
+            </div>
 
-    <div id="quill" aria-label="Post content editor"></div>
-
-    <!-- Hidden field used by the existing save API (stores HTML generated by Quill) -->
-    <textarea id="content" class="input" style="display:none;"></textarea>
-  </div>
-
-  <div class="card editor-preview" style="flex:1; min-width: 280px; margin:0;">
-    <h3 class="card-title" style="margin-top:0;">Live Preview</h3>
-    <div id="preview" class="content"></div>
-  </div>
-</div>
-
-        <div class="admin-row" style="margin-top:.75rem;">
-          <p id="saveStatus" class="muted small" style="display:none;"></p>
-          <div class="cluster">
-            <button id="deleteBtn" class="btn" style="display:none;">Delete</button>
-            <button id="saveBtn" class="btn btn-cta">Save</button>
+            <div class="cover-actions">
+              <button id="removeCoverBtn" class="btn-ghost" type="button" style="display:none;">Remove</button>
+              <p id="coverStatus" class="muted small" style="margin:0; display:none;"></p>
+            </div>
           </div>
         </div>
 
-        <p class="muted small" style="margin-top:.75rem;">
-          Tip: Slug becomes the URL like <code>/resources/post.html?slug=your-slug</code>
-        </p>
+        <!-- EDITOR SHELL -->
+        <div class="editor-shell">
+          <div class="editor-top">
+            <div style="display:flex; align-items:center; gap:.75rem; flex-wrap:wrap;">
+              <span class="pill">Post</span>
+              <span class="muted small">Use the toolbar to format text, add images, and embed videos. No HTML needed.</span>
+            </div>
+            <div style="display:flex; gap:.5rem; align-items:center; flex-wrap:wrap;">
+              <button id="saveDraftBtn" class="link-btn" type="button">💾 SAVE DRAFT</button>
+              <button id="publishBtn" class="btn-primary" type="button">PUBLISH</button>
+            </div>
+          </div>
+
+          <!-- NEW TOOLBAR (requested) -->
+          <div id="toolbar">
+            <span class="ql-formats">
+              <button class="ql-bold"></button>
+              <button class="ql-italic"></button>
+              <button class="ql-underline"></button>
+            </span>
+
+            <span class="ql-formats">
+              <select class="ql-header">
+                <option selected></option>
+                <option value="2"></option>
+                <option value="3"></option>
+              </select>
+            </span>
+
+            <span class="ql-formats">
+              <select class="ql-align"></select>
+            </span>
+
+            <span class="ql-formats">
+              <button class="ql-list" value="ordered"></button>
+              <button class="ql-list" value="bullet"></button>
+              <button class="ql-blockquote"></button>
+            </span>
+
+            <span class="ql-formats">
+              <button class="ql-link"></button>
+              <button class="ql-image"></button>
+              <button class="ql-video"></button>
+            </span>
+
+            <span class="ql-formats">
+              <button class="ql-clean"></button>
+            </span>
+
+            <span class="ql-formats">
+              <button class="ql-undo" type="button">↶</button>
+              <button class="ql-redo" type="button">↷</button>
+            </span>
+          </div>
+
+          <div id="quill" aria-label="Post content editor"></div>
+
+          <!-- Hidden field your existing API saves -->
+          <textarea id="content" class="input" style="display:none;"></textarea>
+        </div>
+
+        <p id="saveStatus" class="muted small status-line"></p>
+
+        <!-- Preview -->
+        <div class="card preview-card">
+          <h3>Preview</h3>
+          <div id="preview" class="content"></div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; margin-top:1rem;">
+          <button id="deleteBtn" class="link-btn" type="button" style="display:none;">Delete</button>
+          <p class="muted small" style="margin:0;">Inline images: click the image icon to upload and insert anywhere.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Schedule Modal -->
+  <div id="scheduleModal">
+    <div class="card card-pad" style="width:min(520px, 100%);">
+      <h2 style="margin:0 0 .25rem;">Schedule post</h2>
+      <p class="muted" style="margin:.25rem 0 1rem;">Pick a date/time. This will save as a Draft with <code>published_at</code> set to the scheduled time.</p>
+      <div class="row">
+        <input id="scheduleDate" class="input" type="date">
+        <input id="scheduleTime" class="input" type="time">
+      </div>
+      <p id="scheduleStatus" class="muted small" style="margin:.75rem 0 0; display:none;"></p>
+      <div style="display:flex; justify-content:flex-end; gap:.5rem; margin-top:1rem;">
+        <button id="cancelSchedule" class="link-btn" type="button">Cancel</button>
+        <button id="confirmSchedule" class="btn-primary" type="button">Save schedule</button>
       </div>
     </div>
   </div>
-
 
 <script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
 <script>
@@ -145,56 +461,14 @@
   const loginStatus = el("loginStatus");
   const saveStatus = el("saveStatus");
   const postsEl = el("posts");
-  const uploadStatus = el("uploadStatus");
 
   const state = { posts: [] };
 
-// ---------- QUILL (RICH TEXT EDITOR) ----------
-const quill = new Quill("#quill", {
-  theme: "snow",
-  modules: {
-    toolbar: {
-      container: "#toolbar",
-      handlers: {
-        image: () => {
-          const url = prompt("Paste an image URL (or use the Upload Image button):");
-          if (!url) return;
-          const caption = prompt("Optional caption (leave blank for none):") || "";
-          const alt = caption || "Blog image";
-          const figure = caption
-            ? `<figure class="post-figure"><img src="${url}" alt="${alt}" class="post-img"><figcaption class="img-caption">${caption}</figcaption></figure>`
-            : `<p><img src="${url}" alt="${alt}" class="post-img"></p>`;
-
-          const range = quill.getSelection(true) || { index: quill.getLength(), length: 0 };
-          quill.clipboard.dangerouslyPasteHTML(range.index, figure);
-          quill.setSelection(range.index + 1, 0);
-        }
-      }
-    }
-  }
-});
-
-function syncFromQuill() {
-  // Quill always has some HTML; normalize empty to ""
-  const html = (quill.root.innerHTML || "").trim();
-  el("content").value = (html === "<p><br></p>") ? "" : html;
-  // Preview in the same styled container as your blog page
-  el("preview").innerHTML = el("content").value;
-}
-
-function setQuillHTML(html) {
-  const safe = (html || "").trim();
-  quill.root.innerHTML = safe || "";
-  syncFromQuill();
-}
-
-quill.on("text-change", syncFromQuill);
-
-  function show(elm, on) { elm.style.display = on ? "" : "none"; }
-  function status(node, msg, isErr) {
+  function show(node, on){ node.style.display = on ? "" : "none"; }
+  function status(node, msg, isErr){
     node.style.display = "block";
     node.textContent = msg;
-    node.style.color = isErr ? "#b42318" : "";
+    node.classList.toggle("danger", !!isErr);
   }
 
   function slugify(s) {
@@ -214,10 +488,140 @@ quill.on("text-change", syncFromQuill);
     return { ok: r.ok, json: await r.json().catch(() => ({})) };
   }
 
+  // ------------------- Cover image upload -------------------
+  const coverTile = el("coverTile");
+  const coverFile = el("coverFile");
+  const coverPreview = el("coverPreview");
+  const coverOverlay = el("coverOverlay");
+  const coverInner = el("coverInner");
+  const coverStatus = el("coverStatus");
+  const removeCoverBtn = el("removeCoverBtn");
+
+  function setCover(url){
+    el("coverUrl").value = url || "";
+    if (url){
+      coverPreview.style.display = "";
+      coverOverlay.style.display = "";
+      coverPreview.style.backgroundImage = `url('${url}')`;
+      coverInner.textContent = "Change cover image";
+      show(removeCoverBtn, true);
+    } else {
+      coverPreview.style.display = "none";
+      coverOverlay.style.display = "none";
+      coverPreview.style.backgroundImage = "";
+      coverInner.textContent = "⬆️ Add cover image";
+      show(removeCoverBtn, false);
+    }
+  }
+
+  coverTile.addEventListener("click", () => coverFile.click());
+  coverTile.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") coverFile.click();
+  });
+
+  removeCoverBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    setCover("");
+    coverStatus.style.display = "none";
+  });
+
+  coverFile.addEventListener("change", async () => {
+    const f = coverFile.files && coverFile.files[0];
+    if (!f) return;
+
+    coverStatus.style.display = "block";
+    coverStatus.textContent = "Uploading cover...";
+    coverStatus.classList.remove("danger");
+
+    const fd = new FormData();
+    fd.append("file", f);
+
+    const r = await fetch("/api/upload", { method: "POST", body: fd });
+    const json = await r.json().catch(() => ({}));
+
+    if (!r.ok) {
+      coverStatus.textContent = json.error || "Cover upload failed.";
+      coverStatus.classList.add("danger");
+      return;
+    }
+
+    setCover(json.url);
+    coverStatus.textContent = "Cover uploaded.";
+    coverFile.value = "";
+  });
+
+  // ------------------- Quill (iPage-style) -------------------
+  const quill = new Quill("#quill", {
+    theme: "snow",
+    modules: {
+      toolbar: {
+        container: "#toolbar",
+        handlers: {
+          image: async () => {
+            // pick file -> upload -> insert at cursor
+            const input = document.createElement("input");
+            input.type = "file";
+            input.accept = "image/*";
+            input.click();
+
+            input.onchange = async () => {
+              const f = input.files && input.files[0];
+              if (!f) return;
+
+              status(saveStatus, "Uploading image...", false);
+
+              const fd = new FormData();
+              fd.append("file", f);
+
+              const r = await fetch("/api/upload", { method: "POST", body: fd });
+              const json = await r.json().catch(() => ({}));
+
+              if (!r.ok) return status(saveStatus, json.error || "Image upload failed.", true);
+
+              const url = json.url;
+              const range = quill.getSelection(true) || { index: quill.getLength(), length: 0 };
+              quill.insertEmbed(range.index, "image", url, "user");
+              quill.setSelection(range.index + 1, 0);
+              syncFromQuill();
+              status(saveStatus, "Image inserted. Remember to save.", false);
+            };
+          },
+          video: () => {
+            const url = prompt("Paste a video URL (YouTube/Vimeo embed link works best):");
+            if (!url) return;
+            const range = quill.getSelection(true) || { index: quill.getLength(), length: 0 };
+            quill.insertEmbed(range.index, "video", url, "user");
+            quill.setSelection(range.index + 1, 0);
+            syncFromQuill();
+          }
+        }
+      },
+      history: { delay: 1000, maxStack: 100, userOnly: true }
+    }
+  });
+
+  // Undo/redo buttons
+  document.querySelector(".ql-undo").addEventListener("click", () => quill.history.undo());
+  document.querySelector(".ql-redo").addEventListener("click", () => quill.history.redo());
+
+  function syncFromQuill() {
+    const html = (quill.root.innerHTML || "").trim();
+    el("content").value = (html === "<p><br></p>") ? "" : html;
+    el("preview").innerHTML = el("content").value;
+  }
+
+  function setQuillHTML(html) {
+    quill.root.innerHTML = (html || "").trim();
+    syncFromQuill();
+  }
+
+  quill.on("text-change", syncFromQuill);
+
+  // ------------------- Posts list -------------------
   async function refresh() {
     const r = await fetch("/api/posts");
     if (!r.ok) return;
-    const data = await r.json();
+    const data = await r.json().catch(() => ({}));
     state.posts = data.posts || [];
     renderPosts();
   }
@@ -227,10 +631,14 @@ quill.on("text-change", syncFromQuill);
     state.posts.forEach(p => {
       const a = document.createElement("article");
       a.className = "card";
+      a.style.cursor = "pointer";
+      a.style.padding = "1rem";
       a.innerHTML = `
-        <h3 class="card-title">${p.title}</h3>
-        <p class="muted small">${p.published ? "Published" : "Draft"} • ${new Date(p.published_at).toLocaleDateString()}</p>
-        <p class="muted">${(p.excerpt || "").slice(0, 120)}</p>
+        <h3 style="margin:.1rem 0 .3rem; font-size:1.05rem;">${escapeHtml(p.title || "")}</h3>
+        <p class="muted small" style="margin:.25rem 0;">
+          ${p.published ? "Published" : "Draft"} • ${p.published_at ? new Date(p.published_at).toLocaleDateString() : ""}
+        </p>
+        <p class="muted" style="margin:.35rem 0 0;">${escapeHtml((p.excerpt || "").slice(0, 120))}</p>
       `;
       a.addEventListener("click", () => loadIntoEditor(p));
       postsEl.appendChild(a);
@@ -242,32 +650,48 @@ quill.on("text-change", syncFromQuill);
     el("title").value = "";
     el("slug").value = "";
     el("excerpt").value = "";
-    el("published").value = "true";
+    el("published").value = "false";
     el("content").value = "";
+    el("scheduledAt").value = "";
+    el("publishedAtHidden").value = "";
+    setCover("");
     setQuillHTML("");
     show(el("deleteBtn"), false);
-    el("editorTitle").textContent = "Editor";
-    uploadStatus.style.display = "none";
+    saveStatus.style.display = "none";
   }
 
-  function loadIntoEditor(p) {
-    el("postId").value = p.id;
+  // When clicking a list item, we only have summary fields (no content).
+  // Fetch full post by slug, then load.
+  async function loadIntoEditor(summary) {
+    const slug = summary.slug || "";
+    if (!slug) return;
+
+    const r = await fetch(`/api/post?slug=${encodeURIComponent(slug)}`);
+    const json = await r.json().catch(() => ({}));
+    if (!r.ok || !json.post) {
+      return status(saveStatus, json.error || "Failed to load post.", true);
+    }
+    const p = json.post;
+
+    el("postId").value = p.id || "";
     el("title").value = p.title || "";
     el("slug").value = p.slug || "";
     el("excerpt").value = p.excerpt || "";
     el("published").value = String(!!p.published);
     el("content").value = p.content || "";
-    setQuillHTML(el("content").value);
+    el("publishedAtHidden").value = p.published_at || "";
+    el("scheduledAt").value = ""; // reset schedule unless user sets it again
+    setCover(p.cover_image || "");
+    setQuillHTML(p.content || "");
     show(el("deleteBtn"), true);
-    el("editorTitle").textContent = "Editing: " + (p.title || "");
-    uploadStatus.style.display = "none";
+    saveStatus.style.display = "none";
   }
 
   el("title").addEventListener("input", () => {
     if (!el("postId").value) el("slug").value = slugify(el("title").value);
   });
 
-  // ---------- LOGIN ----------
+  // ------------------- Login / Logout -------------------
   el("loginBtn").addEventListener("click", async () => {
     const password = el("pw").value;
     const { ok, json } = await api("/api/admin/login", {
@@ -288,24 +712,51 @@ quill.on("text-change", syncFromQuill);
     location.reload();
   });
 
-  el("newBtn").addEventListener("click", () => {
-    clearEditor();
-    el("editorTitle").textContent = "New Post";
-  });
+  el("newBtn").addEventListener("click", () => clearEditor());
 
-  // ---------- SAVE ----------
-  el("saveBtn").addEventListener("click", async () => {
-    status(saveStatus, "Saving...", false);
-
+  // ------------------- Save logic (matches your backend fields) -------------------
+  function buildPayload(forcePublished) {
     syncFromQuill();
+
+    const nowIso = new Date().toISOString();
+
+    const scheduledIso = (el("scheduledAt").value || "").trim();
+    const isScheduled = !!scheduledIso;
+
+    // If scheduled, force Draft and set published_at to scheduled time.
+    const published = isScheduled ? false : (
+      typeof forcePublished === "boolean" ? forcePublished : (el("published").value === "true")
+    );
+
+    // Keep original published_at when editing unless we are scheduling.
+    let published_at = el("publishedAtHidden").value || nowIso;
+
+    // On brand new posts, if publishing now and no schedule, use now.
+    if (!el("postId").value.trim() && published && !isScheduled) published_at = nowIso;
+
+    // Scheduling overrides
+    if (isScheduled) published_at = scheduledIso;
+
+    // If user explicitly publishes now, bump published_at to now
+    if (typeof forcePublished === "boolean" && forcePublished === true && !isScheduled) published_at = nowIso;
 
     const payload = {
       title: el("title").value.trim(),
       slug: (el("slug").value.trim() || slugify(el("title").value)),
       excerpt: el("excerpt").value.trim(),
-      published: el("published").value === "true",
-      content: el("content").value.trim()
+      content: el("content").value.trim(),
+      cover_image: (el("coverUrl").value || "").trim() || null,
+      published,
+      published_at
     };
+
+    return payload;
+  }
+
+  async function savePost({ forcePublished } = {}) {
+    status(saveStatus, "Saving...", false);
+
+    const payload = buildPayload(forcePublished);
 
     if (!payload.title || !payload.slug || !payload.content) {
       return status(saveStatus, "Title, slug, and content are required.", true);
@@ -322,14 +773,17 @@ quill.on("text-change", syncFromQuill);
 
       if (!ok) return status(saveStatus, json.error || "Create failed.", true);
 
-      status(saveStatus, "Saved!", false);
-      await refresh();
+      status(saveStatus, payload.published ? "Published!" : "Draft saved!", false);
 
-      if (json.post && json.post.id) loadIntoEditor(json.post);
+      await refresh();
+      if (json.post && json.post.slug) {
+        // Reload full post to get content + id consistent
+        await loadIntoEditor({ slug: json.post.slug });
+      }
       return;
     }
 
-    // UPDATE
+    // UPDATE (your project already uses this endpoint)
     const { ok, json } = await api(`/api/post?id=${encodeURIComponent(id)}`, {
       method: "PUT",
       body: JSON.stringify(payload)
@@ -337,17 +791,22 @@ quill.on("text-change", syncFromQuill);
 
     if (!ok) return status(saveStatus, json.error || "Update failed.", true);
 
-    status(saveStatus, "Updated!", false);
+    status(saveStatus, payload.published ? "Published!" : "Draft saved!", false);
+
+    // keep published_at hidden in sync
+    el("publishedAtHidden").value = payload.published_at || el("publishedAtHidden").value;
+
     await refresh();
+  }
 
-    if (json.post) loadIntoEditor(json.post);
-  });
+  el("saveDraftBtn").addEventListener("click", () => savePost({ forcePublished: false }));
+  el("publishBtn").addEventListener("click", () => savePost({ forcePublished: true }));
+  el("publishTopBtn").addEventListener("click", () => savePost({ forcePublished: true }));
 
-  // ---------- DELETE ----------
+  // ------------------- Delete -------------------
   el("deleteBtn").addEventListener("click", async () => {
-    const id = el("postId").value;
+    const id = el("postId").value.trim();
     if (!id) return;
-
     if (!confirm("Delete this post?")) return;
 
     const { ok, json } = await api(`/api/post?id=${encodeURIComponent(id)}`, { method: "DELETE" });
@@ -357,48 +816,60 @@ quill.on("text-change", syncFromQuill);
     await refresh();
   });
 
-  // ---------- UPLOAD IMAGE ----------
-  function setUploadStatus(msg, isErr) {
-    uploadStatus.style.display = "block";
-    uploadStatus.textContent = msg;
-    uploadStatus.style.color = isErr ? "#b42318" : "";
-  }
+  // ------------------- Schedule -------------------
+  const scheduleModal = el("scheduleModal");
+  const scheduleTopBtn = el("scheduleTopBtn");
+  const cancelSchedule = el("cancelSchedule");
+  const confirmSchedule = el("confirmSchedule");
+  const scheduleStatus = el("scheduleStatus");
 
-  el("uploadBtn").addEventListener("click", async () => {
-    const fileInput = el("imageFile");
-    const f = fileInput.files && fileInput.files[0];
-    if (!f) return setUploadStatus("Choose an image first.", true);
+  scheduleTopBtn.addEventListener("click", () => {
+    scheduleModal.style.display = "flex";
+    scheduleStatus.style.display = "none";
 
-    setUploadStatus("Uploading...", false);
-
-    const fd = new FormData();
-    fd.append("file", f);
-
-    const r = await fetch("/api/upload", { method: "POST", body: fd });
-    const json = await r.json().catch(() => ({}));
-
-    if (!r.ok) return setUploadStatus(json.error || "Upload failed.", true);
-
-    const url = json.url;
-
-    // Insert image tag into content textarea (THIS is what gets saved to the table)
-    const defaultCaption = "Add image caption here";
-
-    const tag = `
-    <figure class="post-figure">
-      <img src="${url}" alt="${defaultCaption}" class="post-img">
-      <figcaption class="img-caption">${defaultCaption}</figcaption>
-    </figure>
-    `;
-const range = quill.getSelection(true) || { index: quill.getLength(), length: 0 };
-quill.clipboard.dangerouslyPasteHTML(range.index, tag);
-quill.setSelection(range.index + 1, 0);
-syncFromQuill();
-
-    setUploadStatus("Uploaded + inserted. Now click Save.", false);
-    fileInput.value = "";
+    const existing = el("scheduledAt").value;
+    if (existing) {
+      const d = new Date(existing);
+      if (!isNaN(d)) {
+        el("scheduleDate").value = d.toISOString().slice(0,10);
+        el("scheduleTime").value = d.toTimeString().slice(0,5);
+      }
+    }
   });
 
+  cancelSchedule.addEventListener("click", () => scheduleModal.style.display = "none");
+
+  confirmSchedule.addEventListener("click", () => {
+    const date = el("scheduleDate").value;
+    const time = el("scheduleTime").value || "09:00";
+    if (!date) {
+      scheduleStatus.style.display = "block";
+      scheduleStatus.textContent = "Please pick a date.";
+      return;
+    }
+
+    const dt = new Date(date + "T" + time);
+    el("scheduledAt").value = dt.toISOString();
+
+    // Scheduling forces draft
+    el("published").value = "false";
+
+    scheduleStatus.style.display = "block";
+    scheduleStatus.textContent = "Scheduled time saved. Click SAVE DRAFT to apply.";
+    scheduleModal.style.display = "none";
+
+    status(saveStatus, "Scheduled saved. Now click SAVE DRAFT to apply.", false);
+  });
+
+  // ------------------- Utils -------------------
+  function escapeHtml(str){
+    return String(str || "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
 })();
 </script>
 </body>
