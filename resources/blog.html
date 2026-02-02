@@ -93,23 +93,75 @@
     <div id="blogGrid" class="grid cards"></div>
 
 <script>
-(async function () {
+(function () {
   const grid = document.getElementById("blogGrid");
-  const r = await fetch("/api/posts");
-  if (!r.ok) return;
-  const { posts } = await r.json();
 
-  grid.innerHTML = (posts || []).map(p => `
-    <article class="card">
-      <h3 class="card-title">
-        <a href="/resources/post.html?slug=${encodeURIComponent(p.slug)}">${p.title}</a>
-      </h3>
-      <p class="muted small">${new Date(p.published_at).toLocaleDateString()}</p>
-      <p class="muted">${p.excerpt || ""}</p>
-    </article>
-  `).join("");
+  function escapeHtml(str) {
+    return String(str || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  // Fallback: extract first image src from HTML content
+  function extractFirstImageFromHtml(html) {
+    const m = String(html || "").match(/<img[^>]+src=["']([^"']+)["']/i);
+    return m ? m[1] : "";
+  }
+
+  function formatDate(iso) {
+    try {
+      return new Date(iso).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+    } catch {
+      return "";
+    }
+  }
+
+  async function load() {
+    const r = await fetch("/api/posts");
+    if (!r.ok) {
+      grid.innerHTML = `<p class="muted">Could not load posts.</p>`;
+      return;
+    }
+
+    const { posts } = await r.json();
+    const list = Array.isArray(posts) ? posts : [];
+
+    grid.innerHTML = list.map(p => {
+      const title = escapeHtml(p.title);
+      const excerpt = escapeHtml(p.excerpt || "");
+      const date = formatDate(p.published_at);
+
+      // Prefer DB column cover_image if you add it. Otherwise parse from content.
+      const imgUrl = p.cover_image || extractFirstImageFromHtml(p.content);
+
+      const media = imgUrl
+        ? `<a class="card-media-img" href="/resources/post.html?slug=${encodeURIComponent(p.slug)}" aria-label="${title}">
+             <img src="${imgUrl}" alt="${title}" loading="lazy" decoding="async">
+           </a>`
+        : ``;
+
+      return `
+        <article class="card blog-card">
+          ${media}
+          <h3 class="card-title">
+            <a href="/resources/post.html?slug=${encodeURIComponent(p.slug)}">${title}</a>
+          </h3>
+          <p class="muted small">${date}</p>
+          <p class="muted">${excerpt}</p>
+        </article>
+      `;
+    }).join("");
+  }
+
+  load().catch(() => {
+    grid.innerHTML = `<p class="muted">Could not load posts.</p>`;
+  });
 })();
 </script>
+
   </div>
 </section>
 </main>
