@@ -173,21 +173,22 @@
   }
 
   try {
-    const r = await fetch("/api/posts");
-    if (!r.ok) throw new Error("Failed to load posts");
+    const r = await fetch(`/api/post?slug=${encodeURIComponent(slug)}`);
+    if (!r.ok) throw new Error("Failed to load post");
 
-    const { posts } = await r.json();
-    const post = (posts || []).find(p => p.slug === slug);
+    const json = await r.json();
+    const post = json.post;
 
     if (!post) {
       statusEl.textContent = "Post not found.";
       return;
     }
 
-    // Page title + meta
+    // Title
     document.title = `${post.title} • Texas Sports Lighting`;
     titleEl.textContent = post.title;
 
+    // Meta dates
     const dateStr = post.published_at
       ? new Date(post.published_at).toLocaleDateString()
       : "";
@@ -200,38 +201,30 @@
     }
     metaEl.textContent = bits.join(" • ");
 
+    // Excerpt (optional)
     if (post.excerpt && String(post.excerpt).trim()) {
       excerptEl.style.display = "";
       excerptEl.textContent = post.excerpt;
+    } else {
+      excerptEl.style.display = "none";
     }
 
-    // ✅ Updated: render admin-controlled HTML directly (so images + headings work)
-    contentEl.innerHTML = (post.content || "");
+    // Render HTML content (your imported content is HTML)
+    contentEl.innerHTML = post.content || "";
 
-    // Safety: if they typed plain text (no tags), make it readable
-    if (!/[<][a-z][\s\S]*[>]/i.test(post.content || "")) {
-      contentEl.innerHTML = (post.content || "")
-        .split("\n\n")
-        .map(p => `<p>${escapeHtml(p).replace(/\n/g, "<br>")}</p>`)
-        .join("");
+    // If content is empty, show a helpful message
+    if (!String(post.content || "").trim()) {
+      statusEl.textContent = "This post has no content yet.";
+    } else {
+      statusEl.textContent = "";
     }
 
   } catch (err) {
+    console.error(err);
     statusEl.textContent = "Error loading post. Please try again later.";
-  }
-
-  function escapeHtml(str) {
-    return String(str).replace(/[&<>"']/g, function (m) {
-      return ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        "\"": "&quot;",
-        "'": "&#039;"
-      })[m];
-    });
   }
 })();
 </script>
+
 </body>
 </html>
