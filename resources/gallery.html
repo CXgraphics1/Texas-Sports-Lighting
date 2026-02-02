@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Gallery • Texas Sports Lighting</title>
   <meta name="description" content="Texas Sports Lighting — LED sports lighting for every venue." />
-  <link rel="icon" href="/assets/img/Logo.png" type="image/svg+xml">
+
+  <link rel="icon" href="/assets/img/Logo.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -20,24 +21,97 @@
 
   <!-- Schema.org Organization -->
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "Organization", "name": "Texas Sports Lighting", "url": "https://texassportslighting.com", "logo": "https://texassportslighting.com/assets/img/logo-mark.svg", "sameAs": ["https://www.facebook.com/", "https://www.instagram.com/"]}
+  {"@context":"https://schema.org","@type":"Organization","name":"Texas Sports Lighting","url":"https://texassportslighting.com","logo":"https://texassportslighting.com/assets/img/Logo.png","sameAs":["https://www.facebook.com/","https://www.instagram.com/"]}
   </script>
+
+  <style>
+    /* Gallery cards */
+    .gallery-cards {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+    @media (min-width: 640px) {
+      .gallery-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (min-width: 1024px) {
+      .gallery-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+
+    .gallery-card {
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .gallery-card a {
+      display: block;
+      line-height: 0;
+    }
+
+    .gallery-card img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      display: block;
+      transition: transform .25s ease;
+    }
+
+    .gallery-card:hover img {
+      transform: scale(1.02);
+    }
+
+    .gallery-meta {
+      padding: .85rem .95rem;
+      border-top: 1px solid rgba(255,255,255,.08);
+    }
+
+    .gallery-location {
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .gallery-sub {
+      margin: .25rem 0 0 0;
+      font-size: .95rem;
+      opacity: .85;
+    }
+
+    .gallery-tags {
+      margin-top: .6rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: .4rem;
+    }
+
+    .tag {
+      font-size: .8rem;
+      padding: .25rem .5rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.10);
+      opacity: .9;
+    }
+  </style>
 </head>
+
 <body>
 <header class="site-header">
   <div class="container header-inner">
-    <a href="index.html" class="brand" aria-label="Texas Sports Lighting Home">
-      <img class="brand-mark" src="/assets/img/Logo.png" alt="" />
+    <a href="/index.html" class="brand" aria-label="Texas Sports Lighting Home">
+      <img class="brand-mark" src="/assets/img/Logo.png" alt="Texas Sports Lighting" />
       <span class="brand-text">Texas Sports Lighting</span>
     </a>
+
     <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">
       <span class="sr-only">Toggle navigation</span>
       <div class="bar"></div><div class="bar"></div><div class="bar"></div>
     </button>
+
     <nav id="site-nav" class="site-nav">
       <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About</a></li>
+        <li><a href="/index.html">Home</a></li>
+        <li><a href="/about.html">About</a></li>
+
         <li class="has-sub">
           <button class="sub-toggle">Services</button>
           <ul class="sub">
@@ -48,7 +122,9 @@
             <li><a href="/services/sports-complex.html">Sports Complex</a></li>
           </ul>
         </li>
+
         <li><a href="/products.html">Products</a></li>
+
         <li class="has-sub">
           <button class="sub-toggle">Resources</button>
           <ul class="sub">
@@ -56,35 +132,96 @@
             <li><a href="/resources/blog.html">Blog</a></li>
           </ul>
         </li>
-        <li><a href="retrofit-new-build.html">Retrofits &amp; New Build</a></li>
-        <li><a href="controls.html">Controls</a></li>
+
+        <li><a href="/retrofit-new-build.html">Retrofits &amp; New Build</a></li>
+        <li><a href="/controls.html">Controls</a></li>
         <li><a class="btn btn-cta" href="tel:+1XXXXXXXXXX">Call</a></li>
       </ul>
     </nav>
   </div>
 </header>
-<main>
 
+<main>
 <section class="section">
   <div class="container">
     <span class="kicker">Resources</span>
     <h1 class="title">Gallery</h1>
     <p class="lead">Showcase your projects with original photos. Click a photo to enlarge.</p>
-    <div class="grid gallery">
-      <a href="/assets/img/sample1.jpg" data-lightbox><img src="/assets/img/sample1.jpg" alt="Project photo placeholder"/></a>
-      <a href="/assets/img/sample2.jpg" data-lightbox><img src="/assets/img/sample2.jpg" alt="Project photo placeholder"/></a>
-      <a href="/assets/img/sample3.jpg" data-lightbox><img src="/assets/img/sample3.jpg" alt="Project photo placeholder"/></a>
-      <a href="/assets/img/sample4.jpg" data-lightbox><img src="/assets/img/sample4.jpg" alt="Project photo placeholder"/></a>
+
+    <div class="gallery-cards">
+
+      <!-- CARD 1 -->
+      <article class="card gallery-card">
+        <a href="/assets/img/sample1.jpg" data-lightbox>
+          <img src="/assets/img/sample1.jpg" alt="Lighting upgrade project photo" loading="lazy">
+        </a>
+        <div class="gallery-meta">
+          <p class="gallery-location">XYZ Stadium — Austin, TX</p>
+          <p class="gallery-sub muted">Football field retrofit • 2025</p>
+          <div class="gallery-tags">
+            <span class="tag">Retrofit</span>
+            <span class="tag">Football</span>
+            <span class="tag">Controls</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- CARD 2 -->
+      <article class="card gallery-card">
+        <a href="/assets/img/sample2.jpg" data-lightbox>
+          <img src="/assets/img/sample2.jpg" alt="Tennis court lighting project photo" loading="lazy">
+        </a>
+        <div class="gallery-meta">
+          <p class="gallery-location">ABC Tennis Center — Houston, TX</p>
+          <p class="gallery-sub muted">Court lighting upgrade • 2024</p>
+          <div class="gallery-tags">
+            <span class="tag">Tennis</span>
+            <span class="tag">Low-Glare</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- CARD 3 -->
+      <article class="card gallery-card">
+        <a href="/assets/img/sample3.jpg" data-lightbox>
+          <img src="/assets/img/sample3.jpg" alt="Indoor arena lighting project photo" loading="lazy">
+        </a>
+        <div class="gallery-meta">
+          <p class="gallery-location">Downtown Arena — Dallas, TX</p>
+          <p class="gallery-sub muted">Indoor arena • 2025</p>
+          <div class="gallery-tags">
+            <span class="tag">Indoor</span>
+            <span class="tag">High Uniformity</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- CARD 4 -->
+      <article class="card gallery-card">
+        <a href="/assets/img/sample4.jpg" data-lightbox>
+          <img src="/assets/img/sample4.jpg" alt="Aquatic center lighting project photo" loading="lazy">
+        </a>
+        <div class="gallery-meta">
+          <p class="gallery-location">Community Aquatic Center — San Antonio, TX</p>
+          <p class="gallery-sub muted">Wet-location rated fixtures • 2023</p>
+          <div class="gallery-tags">
+            <span class="tag">Aquatic</span>
+            <span class="tag">Wet-Rated</span>
+            <span class="tag">Corrosion Resistant</span>
+          </div>
+        </div>
+      </article>
+
     </div>
   </div>
 </section>
-
 </main>
+
 <footer class="site-footer">
   <div class="container footer-grid">
     <div>
       <div class="brand cluster">
-        <img class="brand-mark" src="/assets/img/logo-mark.svg" alt="" />
+        <img class="brand-mark" src="/assets/img/Logo.png" alt="Texas Sports Lighting" />
         <span class="brand-text">Texas Sports Lighting</span>
       </div>
       <p class="muted">
@@ -92,30 +229,33 @@
       </p>
       <p class="muted small">© 2025 Texas Sports Lighting. All rights reserved.</p>
     </div>
+
     <div>
       <h4>Company</h4>
       <ul class="link-list">
-        <li><a href="about.html">About</a></li>
-        <li><a href="products.html">Products</a></li>
-        <li><a href="controls.html">Controls</a></li>
-        <li><a href="retrofit-new-build.html">Retrofits &amp; New Build</a></li>
+        <li><a href="/about.html">About</a></li>
+        <li><a href="/products.html">Products</a></li>
+        <li><a href="/controls.html">Controls</a></li>
+        <li><a href="/retrofit-new-build.html">Retrofits &amp; New Build</a></li>
       </ul>
     </div>
+
     <div>
       <h4>Services</h4>
       <ul class="link-list">
-        <li><a href="//tennis-centers.html">Tennis Centers</a></li>
+        <li><a href="/services/tennis-centers.html">Tennis Centers</a></li>
         <li><a href="/services/football-stadium.html">Football Stadium</a></li>
         <li><a href="/services/indoor-arenas.html">Indoor Arenas</a></li>
         <li><a href="/services/aquatic-centers.html">Aquatic Centers</a></li>
         <li><a href="/services/sports-complex.html">Sports Complex</a></li>
       </ul>
     </div>
+
     <div>
       <h4>Contact</h4>
       <ul class="link-list">
         <li><a href="mailto:info@texassportslighting.com">info@texassportslighting.com</a></li>
-        <li><a href="contact.html">Request a Quote</a></li>
+        <li><a href="/contact.html">Request a Quote</a></li>
       </ul>
       <div class="social cluster">
         <a href="#" aria-label="Facebook"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M13 22v-9h3l1-4h-4V7c0-1.03.34-2 2-2h2V1h-3c-3.09 0-5 1.91-5 5v3H6v4h3v9h4z"/></svg></a>
@@ -124,5 +264,6 @@
     </div>
   </div>
 </footer>
+
 </body>
 </html>
