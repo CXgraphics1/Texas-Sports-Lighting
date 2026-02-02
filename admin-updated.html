@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin • Texas Sports Lighting</title>
+  <link rel="stylesheet" href="/assets/css/styles.css" />
+  <style>
+    .admin-wrap { max-width: 1100px; margin: 0 auto; padding: 2rem 1rem; }
+    .admin-grid { display: grid; gap: 1rem; grid-template-columns: 1fr; }
+
+    /* Wider layout on desktop: posts list + editor */
+    @media (min-width: 980px) {
+      .admin-grid { grid-template-columns: 380px 1fr; align-items: start; }
+    }
+
+    .admin-row { display:flex; gap: .75rem; flex-wrap: wrap; align-items:center; justify-content: space-between; }
+    .admin-row .btn { white-space: nowrap; }
+    .admin-list .card { cursor: pointer; }
+    textarea.input { min-height: 260px; }
+
+    /* Posts list cards: closer to blog-post meta layout */
+    .post-card { padding: 1rem; }
+    .post-card .card-title { margin-bottom: .35rem; }
+    .post-card .post-meta-row { margin-top: .15rem; }
+
+    /* Split editor + preview */
+    .editor-split { display: grid; gap: 1rem; grid-template-columns: 1fr; }
+    @media (min-width: 980px) { .editor-split { grid-template-columns: 1fr 1fr; } }
+
+    .preview-shell { border-left: 1px solid rgba(255,255,255,.10); padding-left: 1rem; }
+    @media (max-width: 979px) { .preview-shell { border-left: none; padding-left: 0; } }
+
+    .preview-note { display:flex; gap:.5rem; align-items:center; justify-content: space-between; }
+    .preview-note .pill { display:inline-block; padding:.2rem .55rem; border-radius:999px; font-size:.75rem; background: rgba(255,255,255,.08); }
+
+    /* --- Borrowed "blog-post.html" post defaults so preview matches the real post page --- */
+    .content { line-height: 1.75; font-size: 1.05rem; }
+    .content h2 { margin-top: 1.75rem; }
+    .content h3 { margin-top: 1.25rem; }
+    .content p { margin: 0 0 1rem; }
+    .content a { text-decoration: underline; }
+    .content ul, .content ol { padding-left: 1.25rem; margin: 0 0 1rem; }
+    .content blockquote {
+      margin: 1.25rem 0;
+      padding: 1rem 1.25rem;
+      border-left: 4px solid rgba(255,255,255,.25);
+      background: rgba(255,255,255,.06);
+      border-radius: 12px;
+    }
+    .content img, .post-img {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      border-radius: 14px;
+      display: block;
+      margin: 1.25rem 0;
+      box-shadow: 0 10px 30px rgba(0,0,0,.12);
+    }
+    .content hr { border: none; height: 1px; background: rgba(255,255,255,.12); margin: 2rem 0; }
+    .post-meta-row { display:flex; gap:.75rem; flex-wrap:wrap; align-items:center; justify-content: space-between; }
+    .post-meta-row .muted { margin: 0; }
+  </style>
+</head>
+<body>
+  <div class="admin-wrap">
+    <div class="admin-row">
+      <h1 class="title" style="margin:0;">Blog Admin</h1>
+      <div class="cluster">
+        <button id="newBtn" class="btn">New Post</button>
+        <button id="logoutBtn" class="btn">Logout</button>
+      </div>
+    </div>
+
+    <div id="loginCard" class="card" style="margin-top:1rem;">
+      <h2 class="card-title">Login</h2>
+      <p class="muted">Enter the admin password.</p>
+      <div class="row">
+        <input id="pw" class="input" type="password" placeholder="Password">
+        <button id="loginBtn" class="btn btn-cta">Login</button>
+      </div>
+      <p id="loginStatus" class="muted small" style="display:none;"></p>
+    </div>
+
+    <div id="app" style="display:none; margin-top:1rem;" class="admin-grid">
+      <div class="card">
+        <div class="admin-row" style="margin-bottom:.35rem;">
+          <h2 class="card-title" style="margin:0;">Posts</h2>
+          <input id="search" class="input" placeholder="Search..." style="max-width: 260px;">
+        </div>
+        <div id="posts" class="grid cards admin-list"></div>
+      </div>
+
+      <div class="card">
+        <div class="admin-row">
+          <h2 class="card-title" id="editorTitle" style="margin:0;">Editor</h2>
+          <div class="cluster">
+            <a id="viewLink" class="btn" href="#" target="_blank" rel="noopener" style="display:none;">View Post</a>
+          </div>
+        </div>
+
+        <input id="postId" type="hidden" />
+
+        <div class="editor-split" style="margin-top:.75rem;">
+          <!-- EDIT PANEL -->
+          <div id="editPanel">
+            <div class="row">
+              <input id="title" class="input" placeholder="Title *">
+              <input id="slug" class="input" placeholder="Slug (auto)">
+            </div>
+            <div class="row">
+              <input id="excerpt" class="input" placeholder="Excerpt (optional)">
+              <select id="published" class="input">
+                <option value="true">Published</option>
+                <option value="false">Draft</option>
+              </select>
+            </div>
+
+            <div class="row">
+              <input id="imageFile" class="input" type="file" accept="image/*">
+              <button id="uploadBtn" class="btn">Upload Image</button>
+            </div>
+            <p class="muted small" id="uploadStatus" style="display:none;"></p>
+
+            <textarea id="content" class="input" placeholder="Write your post content here... (HTML allowed)"></textarea>
+
+            <div class="admin-row" style="margin-top:.75rem;">
+              <p id="saveStatus" class="muted small" style="display:none;"></p>
+              <div class="cluster">
+                <button id="deleteBtn" class="btn" style="display:none;">Delete</button>
+                <button id="saveBtn" class="btn btn-cta">Save</button>
+              </div>
+            </div>
+
+            <p class="muted small" style="margin-top:.75rem;">
+              Tip: Slug becomes the URL like <code>/resources/post.html?slug=your-slug</code>
+            </p>
+          </div>
+
+          <!-- PREVIEW PANEL -->
+          <div id="previewPanel" class="preview-shell">
+            <div class="preview-note">
+              <p class="muted small" style="margin:0;">Live preview (matches <code>blog-post.html</code> layout)</p>
+              <span id="pvState" class="pill">Draft</span>
+            </div>
+
+            <div style="max-width: 820px; margin-top:.75rem;">
+              <h1 id="pvTitle" class="title" style="margin-top:.25rem;">(Title)</h1>
+
+              <div class="post-meta-row" style="margin-top:.35rem;">
+                <p id="pvMeta" class="muted small">—</p>
+                <p id="pvExcerpt" class="muted small" style="display:none;"></p>
+              </div>
+
+              <div id="pvContent" class="content" style="margin-top:1.25rem;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+(function () {
+  const el = (id) => document.getElementById(id);
+
+  const loginCard = el("loginCard");
+  const app = el("app");
+  const loginStatus = el("loginStatus");
+  const saveStatus = el("saveStatus");
+  const postsEl = el("posts");
+  const uploadStatus = el("uploadStatus");
+
+  const state = { posts: [], filter: "" };
+
+  function show(elm, on) { elm.style.display = on ? "" : "none"; }
+  function status(node, msg, isErr) {
+    node.style.display = "block";
+    node.textContent = msg;
+    node.style.color = isErr ? "#b42318" : "";
+  }
+
+  function slugify(s) {
+    return (s || "")
+      .toLowerCase()
+      .trim()
+      .replace(/['"]/g, "")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+  }
+
+  async function api(path, opts) {
+    const r = await fetch(path, {
+      headers: { "Content-Type": "application/json" },
+      ...opts
+    });
+    return { ok: r.ok, json: await r.json().catch(() => ({})) };
+  }
+
+  function formatPostMeta(p) {
+    const dateStr = p && p.published_at ? new Date(p.published_at).toLocaleDateString() : "";
+    const bits = [];
+    if (p && p.published) bits.push(dateStr ? `Published ${dateStr}` : "Published");
+    else bits.push("Draft");
+    if (p && p.updated_at) {
+      const upd = new Date(p.updated_at).toLocaleDateString();
+      if (upd && upd !== dateStr) bits.push(`Updated ${upd}`);
+    }
+    return bits.join(" • ");
+  }
+
+  async function refresh() {
+    const r = await fetch("/api/posts");
+    if (!r.ok) return;
+    const data = await r.json();
+    state.posts = data.posts || [];
+    renderPosts();
+  }
+
+  function renderPosts() {
+    postsEl.innerHTML = "";
+    const q = (state.filter || "").toLowerCase().trim();
+
+    const list = state.posts
+      .slice()
+      .sort((a, b) => new Date(b.published_at || 0) - new Date(a.published_at || 0))
+      .filter(p => {
+        if (!q) return true;
+        return (
+          String(p.title || "").toLowerCase().includes(q) ||
+          String(p.slug || "").toLowerCase().includes(q) ||
+          String(p.excerpt || "").toLowerCase().includes(q)
+        );
+      });
+
+    if (!list.length) {
+      postsEl.innerHTML = `<p class="muted">No posts found.</p>`;
+      return;
+    }
+
+    list.forEach(p => {
+      const a = document.createElement("article");
+      a.className = "card post-card";
+      a.innerHTML = `
+        <h3 class="card-title">${p.title || "(Untitled)"}</h3>
+        <div class="post-meta-row">
+          <p class="muted small">${formatPostMeta(p)}</p>
+          <p class="muted small" style="${p.slug ? "" : "display:none;"}">/${p.slug || ""}</p>
+        </div>
+        <p class="muted">${(p.excerpt || "").slice(0, 140)}</p>
+      `;
+      a.addEventListener("click", () => loadIntoEditor(p));
+      postsEl.appendChild(a);
+    });
+  }
+
+  function clearEditor() {
+    el("postId").value = "";
+    el("title").value = "";
+    el("slug").value = "";
+    el("excerpt").value = "";
+    el("published").value = "true";
+    el("content").value = "";
+    show(el("deleteBtn"), false);
+    el("editorTitle").textContent = "New Post";
+    uploadStatus.style.display = "none";
+    show(el("viewLink"), false);
+    updatePreview();
+  }
+
+  function loadIntoEditor(p) {
+    el("postId").value = p.id;
+    el("title").value = p.title || "";
+    el("slug").value = p.slug || "";
+    el("excerpt").value = p.excerpt || "";
+    el("published").value = String(!!p.published);
+    el("content").value = p.content || "";
+    show(el("deleteBtn"), true);
+    el("editorTitle").textContent = "Editing: " + (p.title || "");
+    uploadStatus.style.display = "none";
+
+    // Link to live post page
+    const slug = (p.slug || "").trim();
+    if (slug) {
+      const link = el("viewLink");
+      link.href = `/resources/post.html?slug=${encodeURIComponent(slug)}`;
+      show(link, true);
+    } else {
+      show(el("viewLink"), false);
+    }
+
+    updatePreview(p);
+  }
+
+  // Keep slug updated for new posts
+  el("title").addEventListener("input", () => {
+    if (!el("postId").value) el("slug").value = slugify(el("title").value);
+    updatePreview();
+  });
+
+  // Live preview updates
+  ["slug","excerpt","published","content"].forEach(id => {
+    el(id).addEventListener("input", () => updatePreview());
+    el(id).addEventListener("change", () => updatePreview());
+  });
+
+  function updatePreview(existingPost) {
+    const title = el("title").value.trim() || "(Title)";
+    const excerpt = el("excerpt").value.trim();
+    const published = el("published").value === "true";
+    const content = el("content").value || "";
+
+    el("pvTitle").textContent = title;
+
+    // Meta: mimic blog-post.html logic where possible
+    const p = existingPost && existingPost.id ? existingPost : null;
+    const dateStr = p && p.published_at ? new Date(p.published_at).toLocaleDateString() : "";
+    const bits = [];
+    bits.push(published ? (dateStr ? `Published ${dateStr}` : "Published (not saved yet)") : "Draft");
+    if (p && p.updated_at) {
+      const upd = new Date(p.updated_at).toLocaleDateString();
+      if (upd && upd !== dateStr) bits.push(`Updated ${upd}`);
+    }
+    el("pvMeta").textContent = bits.join(" • ");
+
+    // Published/Draft pill
+    el("pvState").textContent = published ? "Published" : "Draft";
+
+    // Excerpt
+    if (excerpt) {
+      el("pvExcerpt").style.display = "";
+      el("pvExcerpt").textContent = excerpt;
+    } else {
+      el("pvExcerpt").style.display = "none";
+      el("pvExcerpt").textContent = "";
+    }
+
+    // Content is stored as HTML (your imported posts are HTML), so render it as HTML
+    el("pvContent").innerHTML = content;
+
+    // If no content, show a hint
+    if (!String(content || "").trim()) {
+      el("pvContent").innerHTML = `<p class="muted">Start writing content on the left — your HTML will preview here.</p>`;
+    }
+  }
+
+  // Search filter
+  el("search").addEventListener("input", (e) => {
+    state.filter = e.target.value || "";
+    renderPosts();
+  });
+
+  // ---------- LOGIN ----------
+  el("loginBtn").addEventListener("click", async () => {
+    const password = el("pw").value;
+    const { ok, json } = await api("/api/admin/login", {
+      method: "POST",
+      body: JSON.stringify({ password })
+    });
+
+    if (!ok) return status(loginStatus, json.error || "Login failed.", true);
+
+    show(loginCard, false);
+    show(app, true);
+    clearEditor();
+    await refresh();
+  });
+
+  el("logoutBtn").addEventListener("click", async () => {
+    await fetch("/api/admin/logout");
+    location.reload();
+  });
+
+  el("newBtn").addEventListener("click", () => {
+    clearEditor();
+  });
+
+  // ---------- SAVE ----------
+  el("saveBtn").addEventListener("click", async () => {
+    status(saveStatus, "Saving...", false);
+
+    const payload = {
+      title: el("title").value.trim(),
+      slug: (el("slug").value.trim() || slugify(el("title").value)),
+      excerpt: el("excerpt").value.trim(),
+      published: el("published").value === "true",
+      content: el("content").value.trim()
+    };
+
+    if (!payload.title || !payload.slug || !payload.content) {
+      return status(saveStatus, "Title, slug, and content are required.", true);
+    }
+
+    const id = el("postId").value.trim();
+
+    // CREATE
+    if (!id) {
+      const { ok, json } = await api("/api/posts", {
+        method: "POST",
+        body: JSON.stringify(payload)
+      });
+
+      if (!ok) return status(saveStatus, json.error || "Create failed.", true);
+
+      status(saveStatus, "Saved!", false);
+      await refresh();
+
+      if (json.post && json.post.id) loadIntoEditor(json.post);
+      return;
+    }
+
+    // UPDATE
+    const { ok, json } = await api(`/api/post?id=${encodeURIComponent(id)}`, {
+      method: "PUT",
+      body: JSON.stringify(payload)
+    });
+
+    if (!ok) return status(saveStatus, json.error || "Update failed.", true);
+
+    status(saveStatus, "Updated!", false);
+    await refresh();
+
+    if (json.post) loadIntoEditor(json.post);
+  });
+
+  // ---------- DELETE ----------
+  el("deleteBtn").addEventListener("click", async () => {
+    const id = el("postId").value;
+    if (!id) return;
+
+    if (!confirm("Delete this post?")) return;
+
+    const { ok, json } = await api(`/api/post?id=${encodeURIComponent(id)}`, { method: "DELETE" });
+    if (!ok) return alert(json.error || "Delete failed.");
+
+    clearEditor();
+    await refresh();
+  });
+
+  // ---------- UPLOAD IMAGE ----------
+  function setUploadStatus(msg, isErr) {
+    uploadStatus.style.display = "block";
+    uploadStatus.textContent = msg;
+    uploadStatus.style.color = isErr ? "#b42318" : "";
+  }
+
+  el("uploadBtn").addEventListener("click", async () => {
+    const fileInput = el("imageFile");
+    const f = fileInput.files && fileInput.files[0];
+    if (!f) return setUploadStatus("Choose an image first.", true);
+
+    setUploadStatus("Uploading...", false);
+
+    const fd = new FormData();
+    fd.append("file", f);
+
+    const r = await fetch("/api/upload", { method: "POST", body: fd });
+    const json = await r.json().catch(() => ({}));
+
+    if (!r.ok) return setUploadStatus(json.error || "Upload failed.", true);
+
+    const url = json.url;
+
+    // Insert image tag into content textarea (THIS is what gets saved to the table)
+    const defaultCaption = "Add image caption here";
+
+    const tag = `
+<figure class="post-figure">
+  <img src="${url}" alt="${defaultCaption}" class="post-img">
+  <figcaption class="img-caption">${defaultCaption}</figcaption>
+</figure>
+    `.trim();
+
+    el("content").value += "\n\n" + tag + "\n\n";
+    updatePreview();
+
+    setUploadStatus("Uploaded + inserted. Now click Save.", false);
+    fileInput.value = "";
+  });
+
+  // Initial preview state
+  updatePreview();
+})();
+</script>
+</body>
+</html>
