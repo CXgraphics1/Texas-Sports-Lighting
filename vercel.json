@@ -1,34 +1,15 @@
 {
   "redirects": [
-    {
-      "source": "/football-stadium-lighting",
-      "destination": "/services/football-stadium.html",
-      "permanent": true
-    },
-    {
-      "source": "/tennis-lighting",
-      "destination": "/services/tennis-centers.html",
-      "permanent": true
-    },
-    {
-      "source": "/indoor-arena-lighting",
-      "destination": "/services/indoor-arenas.html",
-      "permanent": true
-    },
-    {
-      "source": "/aquatic-lighting",
-      "destination": "/services/aquatic-centers.html",
-      "permanent": true
-    },
-    {
-      "source": "/blog/post/:id/:slug*",
-      "destination": "/resources/post.html?slug=:slug",
-      "permanent": true
-    },
-    {
-      "source": "/blog",
-      "destination": "/resources/blog.html",
-      "permanent": true
-    }
+    { "source": "/football-stadium", "destination": "/services/football-stadium", "permanent": true },
+    { "source": "/football-stadium/", "destination": "/services/football-stadium", "permanent": true },
+
+    { "source": "/tennis-centers", "destination": "/services/tennis-centers", "permanent": true },
+    { "source": "/tennis-centers/", "destination": "/services/tennis-centers", "permanent": true },
+
+    { "source": "/blog", "destination": "/resources/blog", "permanent": true },
+    { "source": "/blog/", "destination": "/resources/blog", "permanent": true },
+
+    { "source": "/gallery", "destination": "/resources/gallery", "permanent": true },
+    { "source": "/gallery/", "destination": "/resources/gallery", "permanent": true }
   ]
 }
