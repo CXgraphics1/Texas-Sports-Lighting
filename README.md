@@ -13,11 +13,6 @@ This is a complete, multi‑page static site scaffold for **Texas Sports Lightin
 - Controls (`/controls.html`)
 - Contact / Quote (`/contact.html`)
 
-## How to use
-1. Replace placeholder copy with your **own original text**. Do not copy third‑party site text verbatim.
-2. Swap the placeholder images in `/assets/img/` with your project photos.
-3. Update contact info and `form` action URLs.
-
 ## Dev notes
 - Fonts: Inter (Google Fonts)
 - No frameworks; vanilla HTML/CSS/JS
