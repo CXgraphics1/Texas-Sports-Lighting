@@ -1,46 +1,15 @@
 {
   "cleanUrls": true,
+  "trailingSlash": false,
 
-  "redirects": [
+  "rewrites": [
+    { "source": "/football-stadium", "destination": "/services/football-stadium.html" },
+    { "source": "/tennis-centers", "destination": "/services/tennis-centers.html" },
+    { "source": "/indoor-arenas", "destination": "/services/indoor-arenas.html" },
+    { "source": "/aquatic-centers", "destination": "/services/aquatic-centers.html" },
+    { "source": "/sports-complex", "destination": "/services/sports-complex.html" },
 
-    { "source": "/football-stadium", "destination": "/services/football-stadium.html", "permanent": true },
-    { "source": "/football-stadium/", "destination": "/services/football-stadium.html", "permanent": true },
-
-    { "source": "/tennis-centers", "destination": "/services/tennis-centers.html", "permanent": true },
-    { "source": "/tennis-centers/", "destination": "/services/tennis-centers.html", "permanent": true },
-
-    { "source": "/indoor-arenas", "destination": "/services/indoor-arenas.html", "permanent": true },
-    { "source": "/indoor-arenas/", "destination": "/services/indoor-arenas.html", "permanent": true },
-
-    { "source": "/aquatic-centers", "destination": "/services/aquatic-centers.html", "permanent": true },
-    { "source": "/aquatic-centers/", "destination": "/services/aquatic-centers.html", "permanent": true },
-
-    { "source": "/sports-complex", "destination": "/services/sports-complex.html", "permanent": true },
-    { "source": "/sports-complex/", "destination": "/services/sports-complex.html", "permanent": true },
-
-
-
-    { "source": "/blog", "destination": "/resources/blog.html", "permanent": true },
-    { "source": "/blog/", "destination": "/resources/blog.html", "permanent": true },
-
-    { "source": "/gallery", "destination": "/resources/gallery.html", "permanent": true },
-    { "source": "/gallery/", "destination": "/resources/gallery.html", "permanent": true },
-
-
-
-    { "source": "/products", "destination": "/products.html", "permanent": true },
-    { "source": "/products/", "destination": "/products.html", "permanent": true },
-
-    { "source": "/controls", "destination": "/controls.html", "permanent": true },
-    { "source": "/controls/", "destination": "/controls.html", "permanent": true },
-
-    { "source": "/retrofit-new-build", "destination": "/retrofit-new-build.html", "permanent": true },
-    { "source": "/retrofit-new-build/", "destination": "/retrofit-new-build.html", "permanent": true },
-
-    { "source": "/about", "destination": "/about.html", "permanent": true },
-    { "source": "/about/", "destination": "/about.html", "permanent": true },
-
-    { "source": "/contact", "destination": "/contact.html", "permanent": true },
-    { "source": "/contact/", "destination": "/contact.html", "permanent": true }
+    { "source": "/blog", "destination": "/resources/blog.html" },
+    { "source": "/gallery", "destination": "/resources/gallery.html" }
   ]
 }
