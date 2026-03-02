@@ -1,0 +1,722 @@
+
+:root{
+  --brand-blue:#0b1320;      /* primary text / dark */
+  --brand-accent:#5ce0a3;    /* Texas green */
+  --brand-sky:#7fbad3;       /* optional */
+  --brand-ink:#0b1320;
+  --brand-bg:#cde4ef;        /* Texas light blue */
+  --text:#0b1320;
+  --muted:#334155;
+  --card:#ffffff;
+  --nav-pill:#c0d5e0;        /* pill behind nav */
+  --nav-hover:#c5dfec;       /* hover + dropdown bg */
+  --nav-active:#d7edf7;      /* active nav item */
+  --ring: rgba(92,224,163,0.35);
+  --radius: 16px;
+  --shadow: 0 10px 30px rgba(2,10,30,0.10);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--text);background:var(--brand-bg)}
+img{max-width:100%;height:auto}
+a{color:var(--brand-ink);text-decoration:none}
+a:hover{color:var(--brand-accent)}
+.container{max-width:1200px;margin-inline:auto;padding:0 20px}
+.cluster{display:flex;align-items:center;gap:.75rem}
+.grid{display:grid;gap:1.25rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;height:44px;padding:0 18px;border-radius:999px;border:1px solid transparent;background:var(--brand-blue);color:#fff;font-weight:600;box-shadow: var(--shadow)}
+/* .btn:hover{background:var(--brand-ink)} */
+.btn-ghost{/*background:transparent;*/border-color:rgba(0,0,0,.08);/*color:var(--text)*/}
+.btn-cta{background:var(--brand-accent)}
+.btn-cta:hover{filter:brightness(.95)}
+.badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.55);color:var(--brand-ink);padding:6px 10px;border-radius:999px;font-size:.85rem}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px}
+.muted{color:var(--muted)}
+.small{font-size:.9rem}
+.section{padding:64px 0}
+.section.alt{background:rgba(255,255,255,.35)}
+.section .title{font-size:2.25rem;margin:0 0 12px}
+.section .kicker{letter-spacing:.08em;text-transform:uppercase;color:var(--brand-accent);font-weight:700;font-size:.8rem}
+.section .lead{font-size:1.125rem;color:var(--muted)}
+
+/* ===================== HEADER ===================== */
+.site-header{
+  position:sticky;
+  top:0;
+  background:var(--brand-bg);
+  border-bottom:0;
+  z-index:40;
+}
+
+.header-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  height:72px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:.75rem;
+  font-weight:800;
+  color:var(--brand-ink);
+}
+
+.brand .brand-mark{
+  width:36px;
+  height:36px;
+}
+
+/* Burger (hidden on desktop) */
+.nav-toggle{
+  display:none;
+  border:0;
+  background:transparent;
+  cursor:pointer;
+}
+
+.nav-toggle .bar{
+  width:24px;
+  height:2px;
+  background:#111;
+  margin:5px 0;
+  border-radius:2px;
+}
+
+/* ===================== NAV (DESKTOP FIRST) ===================== */
+
+.site-nav{
+  background:var(--nav-pill);
+  border-radius:999px;
+  /* padding:10px 14px; */
+  box-shadow:var(--shadow);
+}
+
+
+/* 1) Base layout */
+.site-nav ul{
+  display:flex;
+  gap:1rem;
+  align-items:center;
+  list-style:none;
+  margin:0;
+  padding:0;
+}
+
+.site-nav .has-sub{
+  position:relative;
+}
+
+/* 2) Make links AND the toggle share the same look */
+.site-nav a,
+.site-nav .sub-toggle{
+  display:inline-block;
+  padding:10px 12px;
+  border-radius:999px;
+  text-decoration:none;
+  color:inherit;
+}
+
+/* 3) Fully reset the button so it matches anchors */
+.site-nav .sub-toggle{
+  appearance:none;
+  background:transparent;
+  border:0;
+  font:inherit;
+  line-height:inherit;
+  cursor:pointer;
+}
+
+/* 4) Hover/active/focus states — apply to both */
+.site-nav a:hover,
+.site-nav .sub-toggle:hover{
+  background:var(--nav-hover);
+}
+
+.site-nav a:focus-visible,
+.site-nav .sub-toggle:focus-visible{
+  outline:2px solid var(--ring);
+  outline-offset:2px;
+}
+
+/* “Active page / open menu” styling parity */
+.site-nav a[aria-current="page"],
+.site-nav .sub-toggle[aria-expanded="true"]{
+  background:var(--nav-active);
+  font-weight:600;
+}
+
+/* 5) Dropdown menu (desktop) */
+.site-nav .sub{
+  position:absolute;
+  top:110%;
+  left:0;
+  background:var(--nav-hover);
+  border:1px solid rgba(11,19,32,.10);
+  border-radius:12px;
+  box-shadow:var(--shadow);
+  min-width:240px;
+  display:none;
+  flex-direction:column;
+  overflow:hidden;
+}
+
+.site-nav .sub a{
+  padding:10px 12px;
+  border-radius:999px;
+}
+
+.site-nav .has-sub.open .sub{
+  display:flex;
+}
+
+/* Caret on Services toggle */
+.site-nav .sub-toggle::after{
+  content:"▾";
+  margin-left:.4rem;
+  font-size:.8em;
+  transition:transform .15s ease;
+}
+
+.site-nav .sub-toggle[aria-expanded="true"]::after{
+  transform:rotate(180deg);
+}
+
+/* ===================== MOBILE NAV ===================== */
+@media (max-width: 768px){
+  .header-inner{
+    height:64px;
+  }
+
+  /* Show burger on mobile */
+  .nav-toggle{
+    display:inline-flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    padding:6px;
+    margin-left:auto;
+  }
+
+  /* Turn nav into dropdown panel under header */
+  .site-nav{
+    position:absolute;
+    inset-inline:0;
+    top:100%;
+    background:var(--nav-pill);
+    border-bottom:1px solid rgba(11,19,32,.10);
+    box-shadow:0 18px 45px rgba(15,23,42,.12);
+    transform-origin:top;
+    transform:scaleY(.9);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .16s ease, transform .16s ease;
+  }
+
+  /* When open (toggled by JS) */
+  .site-nav.is-open{
+    opacity:1;
+    transform:scaleY(1);
+    pointer-events:auto;
+  }
+
+  /* Stack items vertically */
+  .site-nav ul{
+    flex-direction:column;
+    align-items:stretch;
+    gap:0;
+    padding:.5rem 1rem 1rem;
+  }
+
+  .site-nav a,
+  .site-nav .sub-toggle{
+    display:block;
+    width:100%;
+    text-align:left;
+    padding:.75rem .5rem;
+  }
+
+  /* Services submenu behaves inline, not hover dropdown */
+  .site-nav .has-sub{
+    position:static;
+  }
+
+  .site-nav .sub{
+    position:static;
+    border:0;
+    box-shadow:none;
+    background:transparent;
+    padding-left:.75rem;
+    margin-bottom:.25rem;
+    display:none; /* hidden until .open on mobile */
+  }
+
+  .site-nav .has-sub.open .sub{
+    display:flex;
+    flex-direction:column;
+  }
+
+  .site-nav .sub a{
+    padding:.5rem .5rem;
+    font-size:.95rem;
+  }
+
+  /* Make CTA full-width-ish on mobile */
+  .site-nav .btn.btn-cta{
+    width:100%;
+    justify-content:center;
+    margin-top:.5rem;
+  }
+}
+
+
+
+/* Hero */
+.hero{padding:96px 0;background:linear-gradient(180deg, rgba(205,228,239,.92), rgba(205,228,239,.35));}
+.hero .headline{font-size:3rem;line-height:1.05;margin:0 0 12px}
+.hero .subline{font-size:1.2rem;/*color:var(--muted)*/;max-width:52ch}
+.hero .actions{margin-top:22px;display:flex;gap:.75rem;flex-wrap:wrap}
+
+.hero {
+  background: url("../img/Pike_01.jpeg") center/cover no-repeat;
+  padding: 6rem 0;
+  color: #fff;
+  position: relative;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom right,
+    rgba(0, 0, 0, 0.75),
+    rgba(0, 0, 0, 0.75)
+  );
+  z-index: 1;
+}
+
+.hero .container {
+  position: relative;
+  z-index: 2;
+}
+
+
+/* Feature grid */
+.cards{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+.card .card-title{font-weight:700;font-size:1.15rem;margin:0 0 .35rem}
+
+/* Split */
+.split{grid-template-columns:repeat(2,1fr);align-items:center}
+@media (max-width: 900px){
+  .split{grid-template-columns:1fr}
+}
+
+/* Gallery */
+.gallery{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+.gallery img{border-radius:14px;display:block;width:100%;height:200px;object-fit:cover}
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;padding:20px}
+.lightbox.open{display:flex}
+.lightbox img{max-width:90vw;max-height:85vh;border-radius:16px}
+
+/* Forms */
+.form{display:grid;gap:14px}
+.input, textarea, select{width:100%;padding:12px 14px;border-radius:12px;border:1px solid #e4e7ef;background:#fff;outline:none}
+.input:focus, textarea:focus, select:focus{box-shadow:0 0 0 4px var(--ring)}
+.form .row{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media (max-width: 700px){ .form .row{grid-template-columns:1fr} }
+.help{font-size:.85rem;color:var(--muted)}
+
+/* Footer */
+.site-footer{background:#0b1320;color:#cbd5e1;padding:48px 0;margin-top:64px}
+.site-footer a{color:#e2e8f0}
+.footer-grid{display:grid;gap:1.25rem;grid-template-columns:2fr 1fr 1fr 1.2fr}
+@media (max-width: 900px){
+  .footer-grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width: 600px){
+  .footer-grid{grid-template-columns:1fr}
+}
+
+/* Utility */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}
+
+
+
+/* Generic card enhancement */
+
+.card {
+  position: relative;
+  overflow: hidden; /* keeps media rounded inside */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Top image strip in cards */
+.card-media {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 18px;
+  margin-bottom: 1rem;
+}
+
+/* Map each card to a background from /assets/img */
+.card-media--why {
+  background-image: url("../img/Kingwood_Field_Lights.jpeg");
+}
+
+/* Products */
+.card-media--highmast {
+  background-image: url("../img/Kingwood_Field_Lights.jpeg");
+}
+
+.card-media--arena {
+  background-image: url("../img/Russellville_02.jpg");
+}
+
+.card-media--aquatic {
+  background-image: url("../img/Aquatic-Lighting.jpg");
+}
+
+.card-media--controls {
+  background-image: url("../img/Controls_Example_small.png");
+}
+
+/* Services */
+.card-media--tennis {
+  background-image: url("../img/Pike_01.jpeg");
+}
+
+.card-media--football {
+  background-image: url("../img/Kingwood_Field_Lights.jpeg");
+}
+
+.card-media--indoor {
+  background-image: url("../img/Arena-Lighting.jpg");
+}
+
+.card-media--aquatic-service {
+  background-image: url("../img/Aquatic-Lighting.jpg");
+}
+
+.card-media--complex {
+  background-image: url("../img/Kingwood_Field_Lights.jpeg");
+}
+
+/* Contact card */
+.card-media--contact {
+  background-image: url("../img/Russellville_02.jpg");
+}
+
+
+/* Retrofit / New Build card imagery */
+.card-media--retrofit-start {
+  background-image: url("../img/Kingwood_Field_Lights.jpeg");
+}
+
+.card-media--retrofit-led {
+  background-image: url("../img/Russellville_02.jpg");
+}
+
+.card-media--retrofit-newbuild {
+  background-image: url("../img/Pike_01.jpeg");
+}
+
+.card-media--retrofit-structure {
+  background-image: url("../img/Royal_01.jpeg");
+}
+
+.card-media--retrofit-controls {
+  background-image: url("../img/Kingwood_Field_Lights.jpeg");
+}
+
+
+/* Controls page card imagery */
+.card-media--controls-demo {
+  background-image: url("../img/Controls_Example_small.png");
+}
+
+.card-media--controls-scheduling {
+  background-image: url("../img/Control_Standard.png");
+}
+
+.card-media--controls-scenes {
+  background-image: url("../img/Controls_Scenes.avif");
+}
+
+.card-media--controls-monitoring {
+  background-image: url("../img/Russellville_02.jpg");
+}
+
+.card-media--controls-integration {
+  background-image: url("../img/Kingwood_Field_Lights.jpeg");
+}
+
+
+
+.cards .card {
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.cards .card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12);
+}
+
+/* About page layout tweaks */
+.about-hero {
+  align-items: flex-start;
+  gap: 3rem;
+}
+
+.about-cards {
+  gap: 1.5rem;
+}
+
+/* Right column that holds the cards */
+.about-cards-column {
+  align-self: stretch;
+}
+
+/* Make the side card feel consistent */
+.about-facts {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Optional: tighten list spacing inside facts card */
+.about-facts .link-list li {
+  margin-bottom: 0.35rem;
+}
+
+.card-media--about-experience {
+  background-image: url("../img/Kingwood_Field_Lights.jpeg");
+}
+
+.card-media--about-approach {
+  background-image: url("../img/Russellville_02.jpg");
+}
+
+.card-media--about-coverage {
+  background-image: url("../img/Pike_01.jpeg");
+}
+
+.card-media--about-facts {
+  background-image: url("../img/Royal_01.jpeg");
+}
+
+@media (min-width: 900px) {
+  .about-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr)); /* 2x2 grid */
+  }
+}
+
+
+/* Responsive: stack better on smaller screens */
+@media (max-width: 900px) {
+  .about-hero {
+    gap: 2rem;
+  }
+
+  .about-facts {
+    margin-top: 1.5rem;
+  }
+
+  .about-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* About page hero with background image */
+
+.about-hero-section {
+  position: relative;
+  padding: 6rem 0;
+  background: url("../img/Kingwood_Field_Lights.jpeg") center/cover no-repeat;
+  color: #fff;
+}
+
+.about-hero-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom right,
+    rgba(0, 0, 0, 0.65),
+    rgba(15, 23, 42, 0.4)
+  );
+  z-index: 1;
+}
+
+/* Make content sit above overlay */
+.about-hero {
+  position: relative;
+  z-index: 2;
+}
+
+/* Left copy – keep it readable on dark bg */
+.about-hero .about-copy .kicker,
+.about-hero .about-copy .title,
+.about-hero .about-copy p {
+  color: #f9fafb;
+}
+
+/* Right cards – keep them white like on the home page */
+.about-hero .card {
+  background: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.3);
+}
+
+/* Optional: soften muted text inside about cards */
+.about-hero .card .muted {
+  color: #6b7280;
+}
+
+/* Adjust spacing on smaller screens */
+@media (max-width: 900px) {
+  .about-hero-section {
+    padding: 4rem 0;
+  }
+}
+
+/* Remove white gap between About hero image and footer */
+.about-page .site-footer {
+  margin-top: 0;
+}
+
+/* Just in case the section has extra bottom margin */
+.about-page .about-hero-section {
+  margin-bottom: 0;
+}
+
+
+/* Thank you page layout */
+.thank-you-section {
+  padding: 5rem 0;
+}
+
+.thank-you-grid {
+  align-items: flex-start;
+  gap: 3rem;
+}
+
+.thank-you-card {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.thank-you-card .btn-ghost {
+  margin-top: 1.5rem;
+}
+
+/* Mobile tweaks */
+@media (max-width: 768px) {
+  .thank-you-section {
+    padding: 3.5rem 0;
+  }
+
+  .thank-you-grid {
+    gap: 2rem;
+  }
+
+  .thank-you-card {
+    order: -1; /* put the card above or below if you prefer; remove if not desired */
+  }
+}
+
+/* Blog post typography */
+.content {
+  line-height: 1.75;
+  font-size: 1.05rem;
+}
+
+.content h2 { margin-top: 1.75rem; }
+.content h3 { margin-top: 1.25rem; }
+
+.content p { margin: 0 0 1rem; }
+
+.content a { text-decoration: underline; }
+
+.post-img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border-radius: 14px;
+  display: block;
+  margin: 1.25rem 0;
+  box-shadow: 0 10px 30px rgba(0,0,0,.12);
+}
+
+.content ul, .content ol {
+  padding-left: 1.25rem;
+  margin: 0 0 1rem;
+}
+
+.content blockquote {
+  margin: 1.25rem 0;
+  padding: 1rem 1.25rem;
+  border-left: 4px solid rgba(0,0,0,.15);
+  background: rgba(255,255,255,.6);
+  border-radius: 12px;
+}
+.content img,
+.post-img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  margin: 1.5rem 0;
+  border-radius: 12px;
+}
+.img-caption {
+  font-size: 0.85rem;
+  color: #6b7280;
+  text-align: center;
+  margin-top: -1rem;
+}
+.post-figure {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.post-figure img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+
+.post-figure figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+.service-media {
+  overflow: hidden;
+  padding: 0;
+}
+
+.service-media img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  display: block;
+}
+
+.service-media .media-body {
+  padding: 1rem;
+}
+
+.service-media .media-body .muted {
+  margin: 0.35rem 0 0;
+}
+
+@media (max-width: 860px) {
+  .service-media img { height: 220px; }
+}
