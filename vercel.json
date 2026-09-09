@@ -18,18 +18,39 @@
   ],
 
   "rewrites": [
-    { "source": "/football-stadium", "destination": "/services/football-stadium.html" },
-    { "source": "/tennis-centers", "destination": "/services/tennis-centers.html" },
-    { "source": "/indoor-arenas", "destination": "/services/indoor-arenas.html" },
-    { "source": "/aquatic-centers", "destination": "/services/aquatic-centers.html" },
-    { "source": "/sports-complex", "destination": "/services/sports-complex.html" },
-
-    { "source": "/blog", "destination": "/resources/blog.html" },
-    { "source": "/gallery", "destination": "/resources/gallery.html" },
+    {
+      "source": "/football-stadium",
+      "destination": "/services/football-stadium.html"
+    },
+    {
+      "source": "/tennis-centers",
+      "destination": "/services/tennis-centers.html"
+    },
+    {
+      "source": "/indoor-arenas",
+      "destination": "/services/indoor-arenas.html"
+    },
+    {
+      "source": "/aquatic-centers",
+      "destination": "/services/aquatic-centers.html"
+    },
+    {
+      "source": "/sports-complex",
+      "destination": "/services/sports-complex.html"
+    },
 
     {
-      "source": "/resources/texas-sports-lighting-vs-musco-sports-lighting-which-sports-complex-lighting-provider-fits-your-facility",
-      "destination": "/resources/post?slug=texas-sports-lighting-vs-musco-sports-lighting-which-sports-complex-lighting-provider-fits-your-facility"
+      "source": "/blog",
+      "destination": "/resources/blog.html"
+    },
+    {
+      "source": "/gallery",
+      "destination": "/resources/gallery.html"
+    },
+
+    {
+      "source": "/resources/:slug((?!.*\\.html$)[^/]+)",
+      "destination": "/resources/post?slug=:slug"
     }
   ]
 }
