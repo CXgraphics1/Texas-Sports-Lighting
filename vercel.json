@@ -1,7 +1,6 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
-
   "redirects": [
     {
       "source": "/resources/post",
@@ -9,14 +8,625 @@
         {
           "type": "query",
           "key": "slug",
-          "value": "texas-sports-lighting-vs-musco-sports-lighting-which-sports-complex-lighting-provider-fits-your-facility"
+          "value": "5-signs-your-baseball-field-lighting-needs-a-durable-led-upgrade"
         }
       ],
-      "destination": "/resources/texas-sports-lighting-vs-musco-sports-lighting-which-sports-complex-lighting-provider-fits-your-facility",
+      "destination": "/resources/5-signs-your-baseball-field-lighting-needs-a-durable-led-upgrade",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "4-best-outdoor-led-sports-lighting-systems-for-high-school-and-municipal-athletic-fields"
+        }
+      ],
+      "destination": "/resources/4-best-outdoor-led-sports-lighting-systems-for-high-school-and-municipal-athletic-fields",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "led-football-stadium-lighting-providers-what-to-compare-before-you-hire"
+        }
+      ],
+      "destination": "/resources/led-football-stadium-lighting-providers-what-to-compare-before-you-hire",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "new-construction-vs-retrofit-the-right-way-to-plan-led-basketball-court-lights-for-a-new-gym-build"
+        }
+      ],
+      "destination": "/resources/new-construction-vs-retrofit-the-right-way-to-plan-led-basketball-court-lights-for-a-new-gym-build",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "a-complete-guide-to-improve-player-safety-with-expert-sports-field-led-lighting-services-in-houston"
+        }
+      ],
+      "destination": "/resources/a-complete-guide-to-improve-player-safety-with-expert-sports-field-led-lighting-services-in-houston",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "how-to-assess-vendors-for-an-indoor-sports-venue-lighting-upgrade-the-right-way"
+        }
+      ],
+      "destination": "/resources/how-to-assess-vendors-for-an-indoor-sports-venue-lighting-upgrade-the-right-way",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "retrofit-vs-new-construction-sports-lighting-installation-which-path-is-right-for-your-facility"
+        }
+      ],
+      "destination": "/resources/retrofit-vs-new-construction-sports-lighting-installation-which-path-is-right-for-your-facility",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "installing-tennis-court-lighting-in-texas-doing-yourself-vs-hiring-experts"
+        }
+      ],
+      "destination": "/resources/installing-tennis-court-lighting-in-texas-doing-yourself-vs-hiring-experts",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "led-lighting-vs-traditional-pool-lighting-which-is-the-right-lighting-solution-for-an-aquatic-center-in-texas"
+        }
+      ],
+      "destination": "/resources/led-lighting-vs-traditional-pool-lighting-which-is-the-right-lighting-solution-for-an-aquatic-center-in-texas",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "stadium-lights-in-texas-why-some-facilities-shine-and-others-struggle"
+        }
+      ],
+      "destination": "/resources/stadium-lights-in-texas-why-some-facilities-shine-and-others-struggle",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "local-or-non-local-sports-lighting-companies-in-texas-your-guide-to-better-performance-lower-costs-brighter-nights"
+        }
+      ],
+      "destination": "/resources/local-or-non-local-sports-lighting-companies-in-texas-your-guide-to-better-performance-lower-costs-brighter-nights",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "why-some-baseball-field-lights-fail-too-soon-what-sports-facilities-should-compare-before-installing"
+        }
+      ],
+      "destination": "/resources/why-some-baseball-field-lights-fail-too-soon-what-sports-facilities-should-compare-before-installing",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "fix-uneven-football-field-lighting-with-professional-led-stadium-lighting-installation"
+        }
+      ],
+      "destination": "/resources/fix-uneven-football-field-lighting-with-professional-led-stadium-lighting-installation",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "led-stadium-lighting-vs-traditional-lights-whats-the-better-investment-for-your-facility"
+        }
+      ],
+      "destination": "/resources/led-stadium-lighting-vs-traditional-lights-whats-the-better-investment-for-your-facility",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "led-sports-lighting-or-metal-halide-lighting-which-is-the-right-option-for-indoor-sports-lighting"
+        }
+      ],
+      "destination": "/resources/led-sports-lighting-or-metal-halide-lighting-which-is-the-right-option-for-indoor-sports-lighting",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "how-to-choose-the-best-led-sports-pole-lights-for-outdoor-fields"
+        }
+      ],
+      "destination": "/resources/how-to-choose-the-best-led-sports-pole-lights-for-outdoor-fields",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "traditional-vs-led-lighting-systems-which-lighting-is-best-for-a-baseball-field"
+        }
+      ],
+      "destination": "/resources/traditional-vs-led-lighting-systems-which-lighting-is-best-for-a-baseball-field",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "professional-sports-lighting-or-local-electrical-contractors-whom-to-choose-for-led-lighting-for-tennis"
+        }
+      ],
+      "destination": "/resources/professional-sports-lighting-or-local-electrical-contractors-whom-to-choose-for-led-lighting-for-tennis",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "why-some-tennis-courts-replace-lights-too-soon-how-long-do-led-tennis-court-lights-last"
+        }
+      ],
+      "destination": "/resources/why-some-tennis-courts-replace-lights-too-soon-how-long-do-led-tennis-court-lights-last",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "best-softball-field-lights-for-multi-field-complexes-in-texas-a-comparison-guide"
+        }
+      ],
+      "destination": "/resources/best-softball-field-lights-for-multi-field-complexes-in-texas-a-comparison-guide",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "how-to-find-the-best-led-lighting-installation-service-provider-near-you"
+        }
+      ],
+      "destination": "/resources/how-to-find-the-best-led-lighting-installation-service-provider-near-you",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "commercial-lighting-contractors-vs-electrical-generalists-who-should-handle-your-stadium-project"
+        }
+      ],
+      "destination": "/resources/commercial-lighting-contractors-vs-electrical-generalists-who-should-handle-your-stadium-project",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "traditional-vs-led-lighting-for-game-rooms-make-the-right-investment-for-performance-safety"
+        }
+      ],
+      "destination": "/resources/traditional-vs-led-lighting-for-game-rooms-make-the-right-investment-for-performance-safety",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "football-stadium-lights-compared-high-output-vs-high-maintenance-systems"
+        }
+      ],
+      "destination": "/resources/football-stadium-lights-compared-high-output-vs-high-maintenance-systems",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "the-smart-lighting-upgrade-for-modern-sports-facilities-football-field-led-lights-texas"
+        }
+      ],
+      "destination": "/resources/the-smart-lighting-upgrade-for-modern-sports-facilities-football-field-led-lights-texas",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "traditional-lighting-systems-or-modern-technologies-which-is-a-perfect-indoor-sport-court-lighting"
+        }
+      ],
+      "destination": "/resources/traditional-lighting-systems-or-modern-technologies-which-is-a-perfect-indoor-sport-court-lighting",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "light-up-your-game-with-a-professional-sport-complex-lighting-service"
+        }
+      ],
+      "destination": "/resources/light-up-your-game-with-a-professional-sport-complex-lighting-service",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "pool-light-services-and-underwater-lighting-find-the-best-option-that-fits-for-you"
+        }
+      ],
+      "destination": "/resources/pool-light-services-and-underwater-lighting-find-the-best-option-that-fits-for-you",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "how-is-switching-to-led-tennis-court-lighting-the-best-investment-for-your-court"
+        }
+      ],
+      "destination": "/resources/how-is-switching-to-led-tennis-court-lighting-the-best-investment-for-your-court",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "how-do-modern-led-lights-meet-football-field-lighting-standards-in-texas"
+        }
+      ],
+      "destination": "/resources/how-do-modern-led-lights-meet-football-field-lighting-standards-in-texas",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "traditional-vs-led-stadium-lighting-which-is-the-smarter-choice"
+        }
+      ],
+      "destination": "/resources/traditional-vs-led-stadium-lighting-which-is-the-smarter-choice",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "why-upgrade-led-lighting-for-your-tennis-court-a-complete-guide"
+        }
+      ],
+      "destination": "/resources/why-upgrade-led-lighting-for-your-tennis-court-a-complete-guide",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "led-pole-lights-reason-why-your-competitor-s-ground-looks-better-at-night"
+        }
+      ],
+      "destination": "/resources/led-pole-lights-reason-why-your-competitor-s-ground-looks-better-at-night",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "save-energy-boost-visibility-the-roi-of-modern-basketball-court-lights"
+        }
+      ],
+      "destination": "/resources/save-energy-boost-visibility-the-roi-of-modern-basketball-court-lights",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "the-honest-guide-to-outdoor-sports-lighting-what-most-vendors-won-t-tell-you"
+        }
+      ],
+      "destination": "/resources/the-honest-guide-to-outdoor-sports-lighting-what-most-vendors-won-t-tell-you",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "emergency-lighting-compliance-what-every-sports-ground-owner-must-know-in-2025"
+        }
+      ],
+      "destination": "/resources/emergency-lighting-compliance-what-every-sports-ground-owner-must-know-in-2025",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "professional-your-guide-to-choose-the-best-baseball-field-lights-for-safety-visibility-and-energy"
+        }
+      ],
+      "destination": "/resources/professional-your-guide-to-choose-the-best-baseball-field-lights-for-safety-visibility-and-energy",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "texas-sports-lightings-advanced-sports-stadium-led-lighting-solutions"
+        }
+      ],
+      "destination": "/resources/texas-sports-lightings-advanced-sports-stadium-led-lighting-solutions",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "efficiency-safety-and-style-texass-best-underwater-lighting-partner"
+        }
+      ],
+      "destination": "/resources/efficiency-safety-and-style-texass-best-underwater-lighting-partner",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "minimize-downtime-during-season-texas-sports-lighting-s-best-baseball-field-lights"
+        }
+      ],
+      "destination": "/resources/minimize-downtime-during-season-texas-sports-lighting-s-best-baseball-field-lights",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "transform-your-pool-experience-with-superior-led-pool-lights-and-expert-service"
+        }
+      ],
+      "destination": "/resources/transform-your-pool-experience-with-superior-led-pool-lights-and-expert-service",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "professional-why-led-baseball-field-lights-are-essential"
+        }
+      ],
+      "destination": "/resources/professional-why-led-baseball-field-lights-are-essential",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "eliminate-dark-spots-and-improve-visibility-on-the-field"
+        }
+      ],
+      "destination": "/resources/eliminate-dark-spots-and-improve-visibility-on-the-field",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "professional-enhance-game-night-the-impact-of-high-quality-football-stadium-lights"
+        }
+      ],
+      "destination": "/resources/professional-enhance-game-night-the-impact-of-high-quality-football-stadium-lights",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "elevate-your-aquatic-pool-center-venue-with-expert-texas-sports-lighting"
+        }
+      ],
+      "destination": "/resources/elevate-your-aquatic-pool-center-venue-with-expert-texas-sports-lighting",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "stop-wasting-time-the-fastest-indoor-arena-lights-installation-in-texa"
+        }
+      ],
+      "destination": "/resources/stop-wasting-time-the-fastest-indoor-arena-lights-installation-in-texa",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "struggling-with-dim-tennis-courts-discover-how-texas-sports-lighting-can-brighten-your-game"
+        }
+      ],
+      "destination": "/resources/struggling-with-dim-tennis-courts-discover-how-texas-sports-lighting-can-brighten-your-game",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "from-frustration-to-illumination-the-smart-choice-for-sports-complex-lighting-in-texas"
+        }
+      ],
+      "destination": "/resources/from-frustration-to-illumination-the-smart-choice-for-sports-complex-lighting-in-texas",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "why-texas-sports-s-lighting-is-your-go-to-for-led-baseball-field-lights-in-texas"
+        }
+      ],
+      "destination": "/resources/why-texas-sports-s-lighting-is-your-go-to-for-led-baseball-field-lights-in-texas",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "the-benefits-of-choosing-texas-sports-lighting-for-commercial-pool-lighting-in-texas"
+        }
+      ],
+      "destination": "/resources/the-benefits-of-choosing-texas-sports-lighting-for-commercial-pool-lighting-in-texas",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "brighten-up-your-night-games-with-led-lights-for-football-stadiums-contact-texas-sports-lighting"
+        }
+      ],
+      "destination": "/resources/brighten-up-your-night-games-with-led-lights-for-football-stadiums-contact-texas-sports-lighting",
+      "permanent": true
+    },
+    {
+      "source": "/resources/post",
+      "has": [
+        {
+          "type": "query",
+          "key": "slug",
+          "value": "what-are-the-costly-mistake-of-ignoring-proper-tennis-court-led-lighting"
+        }
+      ],
+      "destination": "/resources/what-are-the-costly-mistake-of-ignoring-proper-tennis-court-led-lighting",
       "permanent": true
     }
   ],
-
   "rewrites": [
     {
       "source": "/football-stadium",
@@ -38,7 +648,6 @@
       "source": "/sports-complex",
       "destination": "/services/sports-complex.html"
     },
-
     {
       "source": "/blog",
       "destination": "/resources/blog.html"
@@ -47,7 +656,6 @@
       "source": "/gallery",
       "destination": "/resources/gallery.html"
     },
-
     {
       "source": "/resources/:slug((?!.*\\.html$)[^/]+)",
       "destination": "/resources/post?slug=:slug"
