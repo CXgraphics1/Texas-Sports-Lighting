@@ -1,3 +1,62 @@
+## Page Redirect
+
+{
+  "redirects": [
+    {
+      "source": "/tennis-centers",
+      "destination": "/services/tennis-centers",
+      "permanent": true
+    },
+    {
+      "source": "/football-stadium",
+      "destination": "/services/football-stadium",
+      "permanent": true
+    },
+    {
+      "source": "/indoor-arenas",
+      "destination": "/services/indoor-arenas",
+      "permanent": true
+    },
+    {
+      "source": "/aquatic-centers",
+      "destination": "/services/aquatic-centers",
+      "permanent": true
+    },
+    {
+      "source": "/sports-complex",
+      "destination": "/services/sports-complex",
+      "permanent": true
+    },
+    {
+      "source": "/tennis-centers.html",
+      "destination": "/services/tennis-centers",
+      "permanent": true
+    },
+    {
+      "source": "/football-stadium.html",
+      "destination": "/services/football-stadium",
+      "permanent": true
+    },
+    {
+      "source": "/indoor-arenas.html",
+      "destination": "/services/indoor-arenas",
+      "permanent": true
+    },
+    {
+      "source": "/aquatic-centers.html",
+      "destination": "/services/aquatic-centers",
+      "permanent": true
+    },
+    {
+      "source": "/sports-complex.html",
+      "destination": "/services/sports-complex",
+      "permanent": true
+    }
+  ]
+}
+
+## Post Redirect
+
 {
   "cleanUrls": true,
   "trailingSlash": false,
