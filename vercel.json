@@ -2,6 +2,19 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "redirects": [
+
+    {
+  "source": "/(.*)",
+  "has": [
+    {
+      "type": "host",
+      "value": "www.texassportslighting.com"
+    }
+  ],
+  "destination": "https://texassportslighting.com/$1",
+  "permanent": true
+},
+    
     { "source": "/tennis-centers", "destination": "/services/tennis-centers", "permanent": true },
     { "source": "/football-stadium", "destination": "/services/football-stadium", "permanent": true },
     { "source": "/indoor-arenas", "destination": "/services/indoor-arenas", "permanent": true },
