@@ -12,7 +12,7 @@
   ],
   "destination": "https://texassportslighting.com/:path*",
   "permanent": true
-}
+},
     { "source": "/tennis-centers", "destination": "/services/tennis-centers", "permanent": true },
     { "source": "/football-stadium", "destination": "/services/football-stadium", "permanent": true },
     { "source": "/indoor-arenas", "destination": "/services/indoor-arenas", "permanent": true },
