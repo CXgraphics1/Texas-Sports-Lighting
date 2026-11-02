@@ -71,18 +71,3 @@
     { "source": "/resources/:slug((?!.*\\.html$)[^/]+)", "destination": "/resources/post?slug=:slug" }
   ]
 }
-{
-  "redirects": [
-    {
-      "source": "/(.*)",
-      "has": [
-        {
-          "type": "host",
-          "value": "www.texassportslighting.com"
-        }
-      ],
-      "destination": "https://texassportslighting.com/$1",
-      "permanent": true
-    }
-  ]
-}
