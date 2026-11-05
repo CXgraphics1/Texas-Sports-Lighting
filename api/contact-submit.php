@@ -29,7 +29,7 @@ if ($name === '' || $email === '' || $projectType === '' || !filter_var($email, 
   http_response_code(400); exit('Please fill in required fields with a valid email.');
 }
 
-$to = 'texassportslighting@gmail.com'; // <-- change this
+$to = 'ranjeet@secure-mail.tech'; // <-- change this
 $subject = "New Quote Request — $name";
 $text = "Name: $name\nEmail: $email\nPhone: $phone\nOrganization: $org\nState: $state\nFacility: $facility\nProject: $projectType\nTimeline: $timeline\n\nMessage:\n$message\n\nIP: ".($_SERVER['REMOTE_ADDR'] ?? 'N/A');
 
